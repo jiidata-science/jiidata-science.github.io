@@ -3,6 +3,6 @@ main:
   #- title: "Quick-Start Guide"
   #  url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   - title: "About Me"
-    url: https://jiidata-science.github.io/minimal-mistakes/
+    url: https://github.com/jiidata-science/minimal-mistakes/blob/master/_pages/about.md
   - title: "Github"
     url: https://jiidata-science.github.io/minimal-mistakes/
