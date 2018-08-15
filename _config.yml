@@ -16,7 +16,7 @@ minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "en-GB"
-title                    : "Making Data Science Fun"
+title                    : "Data Science Hub"
 title_separator          : "-"
 name                     : "Jez Irving"
 description              : "Data Science Blog"
