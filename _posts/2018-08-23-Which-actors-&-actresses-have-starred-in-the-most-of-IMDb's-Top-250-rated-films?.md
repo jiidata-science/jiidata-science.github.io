@@ -54,8 +54,7 @@ init_notebook_mode(connected=True)
 
 ```
 
-
-\
+&nbsp;
 # DATA COLLECTION Part One
 ## Scraping Top 250 rated movies
 *Data captured on 27th July 2018*
@@ -103,9 +102,8 @@ table_data[:5] # print the top 5 results
     #4|'The Dark Knight'|2008|9.0
     #5|'12 Angry Men'|1957|8.9
 
+&nbsp;
 
-
-\
 # DATA COLLECTION Part Two
 ## Scrape movie Genre & Cast/Crew
 
