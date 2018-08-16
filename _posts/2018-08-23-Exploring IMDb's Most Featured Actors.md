@@ -6,7 +6,7 @@ header:
   overlay_color: "#000"
   overlay_filter: "0.6"
   overlay_image: /assets/images/site/DataBlog_titleImage.png
-excerpt: "Scraping movie and cast information from IMDb.com and visualising most featured actors/actresses, with BeautifulSoup, Pandas and Plotly"
+excerpt: "Scraping, exploring & visualising most featured actors in IMDb's Top 250 movies, with BeautifulSoup, Pandas & Plotly"
 author_profile: true
 author: Jez Irving
 classes: wide
