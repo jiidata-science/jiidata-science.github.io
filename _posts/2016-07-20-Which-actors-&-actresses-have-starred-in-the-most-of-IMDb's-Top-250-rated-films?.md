@@ -1,13 +1,24 @@
 ---
 layout: splash
 date: 2016-03-23T11:48:41-04:00
-
+title: "Exploring IMDb Data"
+categories:
+  - data science
+tags:
+  - data
+  - scientist
+  - science
+  - analyst
+  - Python
+  - IMDb
+  - Movies data
+  - Top actors
+  - Best actors
 header:
   overlay_color: "#000"
   overlay_filter: "0.6"
   overlay_image: /assets/DataBlog_titleImage.png
 excerpt: "Scraping movie and cast information from IMDb.com and visualising most featured actors/actresses, with BeautifulSoup, Pandas and Plotly"
-
 
 ---
 
