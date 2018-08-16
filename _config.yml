@@ -21,7 +21,7 @@ title_separator          : "-"
 name                     : "Jez Irving"
 description              : "Data Science Blog"
 url                      : "https://jiidata-science.github.io"
-baseurl                  : "https://jiidata-science.github.io"
+baseurl                  : "/jiidata-science.github.io"
 repository               : "https://github.com/jiidata-science/"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 breadcrumbs              : true # true, false (default)
