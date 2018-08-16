@@ -101,7 +101,7 @@ analytics:
 # Site Author
 author:
   name             : "Jez Irving"
-  avatar           : "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/site/Avatar.png"
   bio              : "A Data Scientist that likes to explore all sorts of topics and new data sources."
   location         : "England, UK"
   email            :
