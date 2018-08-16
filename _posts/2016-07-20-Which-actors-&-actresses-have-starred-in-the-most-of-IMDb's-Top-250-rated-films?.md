@@ -4,7 +4,7 @@ date: 2016-03-23T11:48:41-04:00
 header:
   overlay_color: "#000"
   overlay_filter: "0.6"
-  overlay_image: /assets/DataBlog_titleImage.png
+  overlay_image: /assets/images/site/DataBlog_titleImage.png
 excerpt: "Scraping movie and cast information from IMDb.com and visualising most featured actors/actresses, with BeautifulSoup, Pandas and Plotly"
 author_profile: true
 ---
