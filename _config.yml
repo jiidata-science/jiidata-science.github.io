@@ -21,8 +21,8 @@ title_separator          : "-"
 name                     : "Jez Irving"
 description              : "Data Science Blog"
 url                      : "https://jiidata-science.github.io"
-baseurl                  : "/minimal-mistakes"
-repository               : "jiidata-science.github.io/minimal-mistakes"
+baseurl                  : "/jiidata-science.github.io"
+repository               : "jiidata-science.github.io/jiidata-science.github.io"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 breadcrumbs              : true # true, false (default)
 words_per_minute         : 200
