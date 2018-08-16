@@ -101,9 +101,9 @@ analytics:
 # Site Author
 author:
   name             : "Jez Irving"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an amazing person."
-  location         : "Somewhere"
+  avatar           : "/assets/images/bio-photo.jpg"
+  bio              : "A Data Scientist that likes to explore all sorts of topics and new data sources."
+  location         : "England, UK"
   email            :
   uri              :
   home             : # null (default), "absolute or relative url to link to author home"
@@ -136,6 +136,7 @@ author:
 include:
   - .htaccess
   - _pages
+  - _posts
 exclude:
   - "*.sublime-project"
   - "*.sublime-workspace"
@@ -255,30 +256,25 @@ compress_html:
   ignore:
     envs: development
 
+# Default post and page configurations
 
-# Defaults
 defaults:
-  # _posts
-  - scope:
+  - 
+    scope:
       path: ""
       type: posts
     values:
       layout: single
-      author_profile: true
       read_time: true
       comments: true
       share: true
       related: true
-      
-defaults:
-  # _pages
-  - scope:
+      author_profile: true
+  - 
+    scope:
       path: ""
       type: pages
     values:
-      layout: splash
-      author_profile: true
-      read_time: true
-      comments: true
-      share: true
-      related: true
+      layout: single
+      author_profile: false
+      
