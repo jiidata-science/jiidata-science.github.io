@@ -55,10 +55,10 @@ init_notebook_mode(connected=True)
 ```
 
 
-
+\
 # DATA COLLECTION Part One
 ## Scraping Top 250 rated movies
-* Data captured on 27th July 2018 *
+*Data captured on 27th July 2018*
 
 We start by using urlib3 and beautifulSoup libraries to pull the Top 250 movies from IMDb's [Top 250 web page] (https://www.imdb.com/chart/top). We capture each movie title, along with it's official IMDb ranking and rating. In the code cell below, we create a list of lists, stored in the table_data variable.
 
@@ -105,7 +105,7 @@ table_data[:5] # print the top 5 results
 
 
 
-
+\
 # DATA COLLECTION Part Two
 ## Scrape movie Genre & Cast/Crew
 
