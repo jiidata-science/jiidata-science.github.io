@@ -264,7 +264,7 @@ defaults:
       path: ""
       type: posts
     values:
-      layout: single
+      layout: splash
       read_time: true
       comments: true
       share: true
@@ -277,4 +277,3 @@ defaults:
     values:
       layout: single
       author_profile: false
-      
