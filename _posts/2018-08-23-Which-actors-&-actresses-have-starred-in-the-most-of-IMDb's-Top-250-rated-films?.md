@@ -54,6 +54,8 @@ init_notebook_mode(connected=True)
 
 ```
 
+
+
 # DATA COLLECTION Part One
 ## Scraping Top 250 rated movies
 * Data captured on 27th July 2018 *
@@ -92,14 +94,16 @@ table_data[:5] # print the top 5 results
 
 ```
   
-  # [Output:]
-  # Top250Rank | MovieName | Published | Rating
-  # ---------- | --------- | --------- | ------
-  # 1|'The Shawshank Redemption'|1994|9.2
-  # 2|'The Godfather'|1972|9.2
-  # 3|'The Godfather: Part II'|1974|9.0
-  # 4|'The Dark Knight'|2008|9.0
-  # 5|'12 Angry Men'|1957|8.9
+    #[Output:]
+    #Top250Rank | MovieName | Published | Rating
+    #---------- | --------- | --------- | ------
+    #1|'The Shawshank Redemption'|1994|9.2
+    #2|'The Godfather'|1972|9.2
+    #3|'The Godfather: Part II'|1974|9.0
+    #4|'The Dark Knight'|2008|9.0
+    #5|'12 Angry Men'|1957|8.9
+
+
 
 
 # DATA COLLECTION Part Two
@@ -107,7 +111,7 @@ table_data[:5] # print the top 5 results
 
 Each movie has it's own title landing page, covering a summary of information and a separate page for viewing the full cast/crew list per feature. Providing that you use the Imdb movie Id (i.e. an ID specific to Imdb) it's very simple to manipulate standard URLs and pull the information need:
 
- - https://www.imdb.com/title/{film_id} * : used to retrieve film genre *
+ - https://www.imdb.com/title/{film_id} *: used to retrieve film genre*
  - https://www.imdb.com/title/{film_id}/fullcredits *: used to retrieve full cast / crew*
 
 The film IDs are first retrieved from the initial page scrape, as they are provided in the html in the **'wlb_ribbon'** class. With these 250 x film IDs we proceed to scrape the information we require. I have clearly commented the code, below, to ensure that it can be intuitively understood.
