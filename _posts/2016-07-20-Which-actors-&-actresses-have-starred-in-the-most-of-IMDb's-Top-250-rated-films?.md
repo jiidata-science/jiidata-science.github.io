@@ -7,6 +7,7 @@ header:
   overlay_image: /assets/images/site/DataBlog_titleImage.png
 excerpt: "Scraping movie and cast information from IMDb.com and visualising most featured actors/actresses, with BeautifulSoup, Pandas and Plotly"
 author_profile: true
+author: Jez Irving
 ---
 
 So here it is...my first data science article (hopefully not my last). I decided to kick-off my series with at IMDb's top rated films to identify actors/actresses that feature across multiple top films - the 'real movie stars'. To be brutally honest about why I've dived into this relatively random topic; primarily I wanted to use web scraping technology (i.e. Python with beautifulSoup in this case) to collect data that isn't otherwise readily available in the desired format. The secondary reason was merely because I enjoy watching movies - hardly a unique interest.
