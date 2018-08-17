@@ -210,21 +210,21 @@ The boxplot below illustrates the distribution of IMDb movie ratings. With a med
 
 Extending on the above point, movie ratings do increase linearly with movie rankings. The cumulative distribution, below, presents the distribution of movie ratings slightly differently. Form this chart we deduce that 95% of movies have a rating between 8.2 - 8.7 (range: 0.5), whilst the remaining 5% have much higher scores between 8.7 to 9.2 (range: 0.5)
 
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/6.embed"></iframe>
+<iframe width="900" height="600" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/6.embed"></iframe>
 
 
 ## Part 5 (of 5): Data Exploration, *Who really are the best actors?*
 
-<iframe width="900" height="400" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/8.embed"></iframe>
+So this was the bit I was most interested in. Here we take a look at which actors and actresses appear (in the cast & crew listings) across all 250 movies, how many movies they appeared in and what those films were?
 
-<iframe width="900" height="500" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/10.embed"></iframe>
+<iframe width="900" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/8.embed"></iframe>
 
+In the code snippet below we create an interactive plotly chart that allows the user to select the top N actors/actresses with the most film features. The film start with the highest number of features appear on the far left of the chart and appears in descending order.
 
-  - So this was the bit I was most interested in. Here we take a look at which actors and actresses appear (in the cast & crew listings) across all 250 movies, how many movies they appeared in and what those films were?
-  - in the code snippet below we create an interactive plotly chart that allows the user to select the top N actors/actresses with the most film features. The film start with the highest number of features appear on the far left of the chart and appears in descending order.
-  - Perhaps I'm not quite the film buff I first thought but, to my suprise, the first actor I had heard of was in position five - Robert De Niro - who has appeared in eight of the top 250 films and is undoubtably a household name.
-  - Interestingly, John Ratzenberger has 'appeared' in more of the Top 250 movies than any other actor - a whopping 12 x movies. However, 10 x of these were animation films - so he didn't even 'appear' in them at all. Bess Flowers, in position two, featured in 10 of the Top 250 movies but all before the 1970s.
-  - In third position, Joseph Oliveira, was an quirky find - whilst he's featured in 9 of the Top 250 movies, he's only played 'supporting' or uncredited roles in each. For example: Dark Knight - a walk on officer, https://www.imdb.com/title/tt0468569/fullcredits?ref_=tt_cl_sm#cast uncredited role as 'Marciano' in Goodfellas https://www.imdb.com/title/tt0099685/fullcredits?ref_=tt_cl_sm#cast The Departed, again an uncredited Officer Court Room Attendant (uncredited) in Wolf of Wall Street https://www.imdb.com/title/tt0993846/fullcredits
+<iframe width="900" height="580" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/10.embed"></iframe>
+
+Perhaps I'm not quite the film buff I first thought but, to my suprise, the first actor I had heard of was in position five - Robert De Niro - who has appeared in eight of the top 250 films and is undoubtably a household name. Interestingly, John Ratzenberger has 'appeared' in more of the Top 250 movies than any other actor - a whopping 12 x movies. However, 10 x of these were animation films - so he didn't even 'appear' in them at all. Bess Flowers, in position two, featured in 10 of the Top 250 movies but all before the 1970s.
+In third position, Joseph Oliveira, was an quirky find - whilst he's featured in 9 of the Top 250 movies, he's only played 'supporting' or 'uncredited' roles in each. To list a few examples, Joseph featured as a [walk on officer in Dark Knight (2008)](https://www.imdb.com/title/tt0468569/fullcredits?ref_=tt_cl_sm#cast); held an uncredited role as ['Marciano' in Goodfellas (1990)](https://www.imdb.com/title/tt0099685/fullcredits?ref_=tt_cl_sm#cast); and **again** an [uncredited Officer Court Room Attendant in Wolf of Wall Street (2013)](https://www.imdb.com/title/tt0993846/fullcredits).
   
 ## Summary & Final Thoughts
   
