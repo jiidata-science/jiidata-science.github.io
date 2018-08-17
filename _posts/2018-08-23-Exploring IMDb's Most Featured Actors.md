@@ -18,11 +18,11 @@ classes: wide
 
 # INTRO
 
-So here it is...my first data science article (hopefully not my last). I decided to kick-off my series with at IMDb's top rated films to identify actors/actresses that feature across multiple top films - the 'real movie stars'. To be brutally honest about why I've dived into this relatively random topic; primarily I wanted to use web scraping technology (i.e. Python with beautifulSoup in this case) to collect data that isn't otherwise readily available in the desired format. The secondary reason was merely because I enjoy watching movies - hardly a unique interest.
+So here it is...my first data science article (hopefully not my last). I decided to kick-off my series with a look at IMDb's film and cast listings, to identify which actors feature in the most top rated movies; to find out for myself who the 'real' movie stars are?
 
-Whilst IMDb's does readily offer APIs for accessing movie information (seems a little suprising to me) they do offer a number of [static datasets] (https://datasets.imdbws.com/). I chose not use these datasets and scraped required data directly from the IMDb.com.
+So why have I chosen to explore this relatively random topic? Primarily, I wanted to demonstrate the use of web scraping technology to collect data that isn't otherwise readily available in the desired format. The second reason was merely because I enjoy watching movies...hardly a unique interest.
 
-In this blog:
+**In this blog:**
 
   * We start with scraping IMDb film, actors/actress data (using BeautifulSoup)
   * We process and clean the captured data (using Pandas)
@@ -31,8 +31,9 @@ In this blog:
     * Understanding which film genres are more likely to have higher ratings, and
     * Identifying which actors/actresses appear in the most top rated films
 
-Ultimately, this blog culminates in identifying "Which actors/actresses feature in the most Top 250 films?". I began this project under the naive assumption that these actors/actresses would be popular household names; the likes of Katharine Hepburn, Robert De Niro and Jack Nicholson. IMDb themselves provide a ranking of ['100 greatest actors & actresses'] (https://www.imdb.com/list/ls053085147/) BUT This analysis actually provides some suprising outcomes...enjoy!
+Ultimately, this blog culminates in identifying *which actors feature in the most Top 250 films?*. I began this project under the naive assumption that such actors would be well-known household names; the likes of *Katharine Hepburn, Robert De Niro* and *Jack Nicholson* - similar to IMDb's list of [100 greatest actors & actresses of all time](https://www.imdb.com/list/ls053085147/) - **BUT this analysis provides some suprising outcomes...enjoy!**
 
+Whilst IMDb does readily offer APIs for accessing movie information (which seemed a little suprising to me) they do offer a number of [static datasets](https://datasets.imdbws.com/). I chose **not** use these datasets and scraped what I needed directly from the IMDb.com.
 
 ``` python
 
