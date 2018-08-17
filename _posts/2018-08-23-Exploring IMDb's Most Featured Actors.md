@@ -115,24 +115,29 @@ Print the first few values stored in *table_data*
     #5|'12 Angry Men'|1957|8.9
 
 &nbsp;
-## Part 3 (of 5): Data collection, scraping movie genre & movies cast & crew
+## Part 3 (of 5): Data collection, scraping movie genre & cast + crew
 
+Having captured all Top Movies, and their corresponding Movie IDs in step 2, we now focus on capturing the movie **genre** and **cast and crew** for each movie. This data will allow us to explore actors that feature across multiple top rated movies.
 
-Each movie has it's own title landing page, covering a summary of information and a separate page for viewing the full cast/crew list per feature. Providing that you use the Imdb movie Id (i.e. an ID specific to Imdb) it's very simple to manipulate standard URLs and pull the information need:
+On IMDb.com, each listed movie has it's own title landing page, covering a summary of movie information, and a separate page for viewing the corresponding full cast & crew. Providing that you use the Imdb movie Id (i.e. an ID specific to Imdb) it's very simple to manipulate IMDb's page URLs to retrieve the information we're after:
 
- - https://www.imdb.com/title/{film_id} *: used to retrieve film genre*
- - https://www.imdb.com/title/{film_id}/fullcredits *: used to retrieve full cast / crew*
+ - https://www.imdb.com/title/{film_id} *: used to retrieve film genre. Replace {film_id} with integer movie ID value*
+  - Example: https://www.imdb.com/title/tt0111161 for Shawshank Redemption
 
-The film IDs are first retrieved from the initial page scrape, as they are provided in the html in the **'wlb_ribbon'** class. With these 250 x film IDs we proceed to scrape the information we require. I have clearly commented the code, below, to ensure that it can be intuitively understood.
+ - https://www.imdb.com/title/{film_id}/fullcredits *: used to retrieve full cast & crew. Replace {film_id} with integer movie ID value*
+  - Example: https://www.imdb.com/title/tt0111161/fullcredits for Shawshank Redemption full cast & crew
+
+The **film IDs are first retrieved from the *soupified* page from step 2**, as they are provided in the html in the **'wlb_ribbon'** class. With these 250 x film IDs we proceed to scrape the genre and cast data we require. The code block, below, is clearly commented.
 
 ``` python
-# return all of the imdb film ids for crawling film casts
+# Empty list objects. We'll be storing scraped data in this
 film_ids = []
 base_castAndCrew = []
 
+# Soupified webpage from Step 2 (above). Retrieve all movie IDs
 links_class  = soup_Top250.findAll("div", {"class":"wlb_ribbon"}) # table/html tag containing each IMDb movie ID
 
-# for each movie, using the film ID:
+# For each movie, using the film_ID:
 for idx, link in enumerate(links_class):    
     
     counter = idx + 1
@@ -173,6 +178,8 @@ for idx, link in enumerate(links_class):
     list_castAndCrew, html_castAndCrew, soup_castAndCrew, table_castAndCrew
 ``` 
 
+We print to the log for each 25th iteration (just so we have an indication of progress).
+
     #[INFO] Scraping film no. 25 of 250
     #[INFO] Scraping film no. 50 of 250
     #[INFO] Scraping film no. 75 of 250
@@ -183,6 +190,14 @@ for idx, link in enumerate(links_class):
     #[INFO] Scraping film no. 200 of 250
     #[INFO] Scraping film no. 225 of 250
     #[INFO] Scraping film no. 250 of 250
+
+At this point I all required data had been captured. We're now ready to start exploring!
+
+We have two data sets:
+
+1. **table_data** : contains the following attributes for each movie ([movie_rank, movie_name, movie_year, movie_rating])
+2. **film_ids**: contains the following attributes for each movie ([filmID , filmID_castURL , filmID_homePageURL, genre_clean])
+2. **base_castAndCrew**: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
 
 &nbsp;
 # EXPLORATORY ANALYSIS
