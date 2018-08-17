@@ -24,32 +24,37 @@ So why have I chosen to explore this relatively random topic? Primarily, I wante
 
 **In this blog:**
 
-  * We start by scraping the Top 250 rated movies and all cast/crew, from IMDb.com **([using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/))**
-  * We process and clean the scraped data **([using Pandas](https://pandas.pydata.org/))**
-  * Then we start to **explore and visualise the data ([with Plotly](https://plot.ly/python/))** by:
+  * We start by scraping the Top 250 rated movies and all cast/crew, from IMDb.com (**[using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)**)
+  * We process and clean the scraped data (**[using Pandas](https://pandas.pydata.org/)**)
+  * Then we start to **explore and visualise the data** ([with Plotly](https://plot.ly/python/)) by:
     * Looking at the distribution of Top 250 film ratings
     * Understanding which film genres are more likely to have higher ratings, and
     * Identifying which actors appear in the most top rated films
 
 Ultimately, this blog culminates in identifying *which actors feature in the most Top 250 films?*. I began this project under the naive assumption that such actors would be well-known household names; the likes of *Katharine Hepburn, Robert De Niro* and *Jack Nicholson* - similar to IMDb's list of [100 greatest actors & actresses of all time](https://www.imdb.com/list/ls053085147/) - **BUT this analysis provides some suprising outcomes...enjoy!**
 
-Whilst IMDb does readily offer APIs for accessing movie information (which seemed a little suprising to me) they do offer a number of [static datasets](https://datasets.imdbws.com/). I chose **not** use these datasets and scraped what I needed directly from the IMDb.com.
+*Additional note: whilst IMDb does readily offer APIs for accessing movie information (which seemed a little suprising to me) they do offer a number of [static datasets](https://datasets.imdbws.com/). I chose **not** use these datasets and scraped what I needed directly from the IMDb.com.*
 
+&nbsp;
+## Part 1 (of 5): Required Python Libraries
 ``` python
 
-# Import required Python libraries and setup workspace
-
+# libraries for requesting and scraping web pages
 import certifi
 import urllib3
 http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 from bs4 import BeautifulSoup
+
+# libraries for structuring data
 import pandas as pd
 import numpy as np
 import csv
 
+# libraries for fitting models/relationships (exploratory analysis)
 from scipy import polyfit, polyval
 from scipy.interpolate import CubicSpline
 
+# libraries (and configuration) for visualisation with Plotly
 import plotly.graph_objs as go
 from plotly import __version__
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
