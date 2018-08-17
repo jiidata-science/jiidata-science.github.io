@@ -202,23 +202,23 @@ We have two data sets:
 
 ## Part 4 (of 5): Data Exploration, visualising rating distributions
 
-I began by exploring the movie ratings themselves; asking questions of the data such as *Is there a linear relationsip between movie ranking and movie rating?* and *Which movie genres typically have higher ratings?*.
+I began by exploring the movie ratings themselves; asking questions of the data such as **Is there a linear relationsip between movie ranking and movie rating?** and **Which movie genres typically have higher ratings?**.
 
-The boxplot below
+The boxplot below illustrates the distribution of IMDb movie ratings. With a median movie rating of 8.2 and an upper fence of 8.8, the boxplot identifies seven 'outliers' that have anomalously high ratings. To no suprise, these top rated films include well-known favourites - including [1] The Shawshank Redemption, [2] The Godfather, [3] The Godfather: Part II, [4] The Dark Knight, and [5] 12 Angry Men.
 
 <iframe width="900" height="500" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/4.embed"></iframe>
 
-Looking at the two ratings charts, we deduce that across the Top 250 movies:
-  - the median movie rating is 8.2
-  - The box plot identifies a number of outliers (note: Plotly atypically considers outliers as data points that are 1.5 x Interquartile range from the first (Q1) and third (Q3) quartiles. These seven outliers represent relatively (very) highly rated movies compares with others. With no suprise, these top rated films include some of my (and everyone elses) favouries
-[{'1':'The Shawshank Redemption', '2': 'The Godfather','3': 'The Godfather: Part II','4': 'The Dark Knight', '5': '12 Angry Men'}]
--   extending on the above point, ratings do not have a purely (inverse) linear relationship with movie ranking. 95% of movies have a rating between 8.2 - 8.7 (range: 0.5), whilst the remaining 5% have much higher scores between 8.7 to 9.2 (range: 0.5).
-  - The boxplot illustrates movie rating distribution characteristics, of the Top 250 rated films, split by film genre
-  - I've ordered the x-axis from highest to lowest median rating value, by genre.
-  - Perhaps, suprisingly, Music and Horror movies have the highest median rankings; but unsuprisgly each of these genres have just five contributing movies
-  - X% of top movies are either dramas, x or y
-  
+Extending on the above point, movie ratings do increase linearly with movie rankings. The cumulative distribution, below, presents the distribution of movie ratings slightly differently. Form this chart we deduce that 95% of movies have a rating between 8.2 - 8.7 (range: 0.5), whilst the remaining 5% have much higher scores between 8.7 to 9.2 (range: 0.5)
+
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/6.embed"></iframe>
+
+
 ## Part 5 (of 5): Data Exploration, *Who really are the best actors?*
+
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/8.embed"></iframe>
+
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/10.embed"></iframe>
+
 
   - So this was the bit I was most interested in. Here we take a look at which actors and actresses appear (in the cast & crew listings) across all 250 movies, how many movies they appeared in and what those films were?
   - in the code snippet below we create an interactive plotly chart that allows the user to select the top N actors/actresses with the most film features. The film start with the highest number of features appear on the far left of the chart and appears in descending order.
