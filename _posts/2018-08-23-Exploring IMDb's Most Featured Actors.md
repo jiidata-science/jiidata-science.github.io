@@ -16,9 +16,9 @@ classes: wide
 # ============================ WORK-IN-PROGRESS
 
 
-# INTRO
+## Introduction & Purpose
 
-So here it is...my first data science article (hopefully not my last). I decided to kick-off my series with a look at IMDb's film and cast listings, to identify which actors feature in the most top rated movies; to find out for myself who the 'real' movie stars are?
+So here it is...my first data science article (hopefully not my last). I decided to kick-off my series with a look at IMDb's film and cast listings, to identify which actors feature in the most top rated movies; to find out for myself who the 'real' movie stars are? This article includes as selection of Python code-blocks aswell as visualisations that help us to explore and understand the data.
 
 So why have I chosen to explore this relatively random topic? Primarily, I wanted to demonstrate the use of web scraping technology to collect data that isn't otherwise readily available in the desired format. The second reason was merely because I enjoy watching movies...hardly a unique interest.
 
@@ -35,7 +35,6 @@ Ultimately, this blog culminates in identifying *which actors feature in the mos
 
 *Additional note: whilst IMDb does readily offer APIs for accessing movie information (which seemed a little suprising to me) they do offer a number of [static datasets](https://datasets.imdbws.com/). I chose **not** use these datasets and scraped what I needed directly from the IMDb.com.*
 
-&nbsp;
 ## Part 1 (of 5): Required Python Libraries
 ``` python
 
@@ -64,30 +63,34 @@ init_notebook_mode(connected=True)
 ```
 
 &nbsp;
-# DATA COLLECTION (Part One)
-## Scraping Top 250 rated movies
+## Part 2 (of 5): Data collection, scraping IMDb's Top 250 rated movies
 *Data captured on 27th July 2018*
 
-We start by using urlib3 and beautifulSoup libraries to pull the Top 250 movies from IMDb's [Top 250 web page] (https://www.imdb.com/chart/top). We capture each movie title, along with it's official IMDb ranking and rating. In the code cell below, we create a list of lists, stored in the table_data variable.
+We start by using *urlib3* and *beautifulSoup* libraries to scrape the Top 250 movies from IMDb's [Top 250 web page](https://www.imdb.com/chart/top).
+We capture each movie title, along with it's official IMDb ranking and rating. All required data is stored within the table **'chart full-width'** class attribute, on the IMDb web page, highlighted in the printscreen below.
+
+![](https://github.com/jiidata-science/Imdb_Top_Actors/blob/master/Images/TopRatedMovies.png)
+
+The code block, below, scrapes the tabulated data and stores it as lists (in the table_data list object).
 
 ``` python
-table_data = [] # empty list. We'll be adding results to this
+table_data = [] # empty list object. We'll be storing scraped data in this
 
-# IMDb page url for all top 250 rated films
+# IMDb page url for Top 250 rated movies
 url_imdbTop250 = 'https://www.imdb.com/chart/top'
 
-# run web page request
+# Executre web page request
 page_imdbTop250 = http.request('GET', url_imdbTop250)
 
-# allow for page exploration using BeautifulSoup (i.e. soup-ify returned webpage)
+# Allow for page exploration using BeautifulSoup (i.e.'soupify' returned webpage)
 soup_Top250 = BeautifulSoup(page_imdbTop250.data, "lxml")
 
-# create tabulated data with top 250 film information
-table = soup_Top250.find('table', attrs={'class':'chart full-width'})# select the <table ...> that contains the ranked movies
+# Subset returned webpage - select Top Rated Movies 'table' only
+table = soup_Top250.find('table', attrs={'class':'chart full-width'})
 table_body = table.find('tbody') # further subset the page. select only the table body
 rows = table_body.find_all('tr') # find all rows within top 250 rated movies table
 
-# for each row in table extract the: rank, movie name, year published and Imdb rating
+# For each row in table extract the: rank, movie name, year published and Imdb rating
 for row in rows:
     cols = row.find_all('td')
     cols = [ele.text.strip() for ele in cols]
@@ -96,12 +99,15 @@ for row in rows:
     movie_year = int(movie_name_string[-5:-1])
     movie_name = movie_name_string[movie_name_string.index('.')+1:movie_name_string.index('(')].strip()
     movie_rating = cols[2]
-    table_data.append([movie_rank, movie_name, movie_year, movie_rating])
 
-table_data[:5] # print the top 5 results
-
+    # for each row, append selected attributes to the table_data object
+    table_data.append([movie_rank, movie_name, movie_year, movie_rating]) 
 ```
   
+Print the first few values stored in *table_data*
+
+    table_data[:5] # print the top 5 results
+
     #[Output:]
     #Top250Rank | MovieName | Published | Rating
     #---------- | --------- | --------- | ------
