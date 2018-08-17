@@ -59,7 +59,7 @@ init_notebook_mode(connected=True)
 
 ```
 
-&nbsp;
+
 ## Part 2 (of 5): Data collection, scraping IMDb's Top 250 rated movies
 *Data captured on 27th July 2018*
 
@@ -114,7 +114,7 @@ Print the first few values stored in *table_data*
     #4|'The Dark Knight'|2008|9.0
     #5|'12 Angry Men'|1957|8.9
 
-&nbsp;
+
 ## Part 3 (of 5): Data collection, scraping movie genre & cast + crew
 
 Having captured all Top Movies, and their corresponding Movie IDs in step 2, we now focus on capturing the movie **genre** and **cast and crew** for each movie. This data will allow us to explore actors that feature across multiple top rated movies.
@@ -122,10 +122,10 @@ Having captured all Top Movies, and their corresponding Movie IDs in step 2, we 
 On IMDb.com, each listed movie has it's own title landing page, covering a summary of movie information, and a separate page for viewing the corresponding full cast & crew. Providing that you use the Imdb movie Id (i.e. an ID specific to Imdb) it's very simple to manipulate IMDb's page URLs to retrieve the information we're after:
 
  - https://www.imdb.com/title/{film_id} *: used to retrieve film genre. Replace {film_id} with integer movie ID value*
-  - Example: https://www.imdb.com/title/tt0111161 for Shawshank Redemption
+  ⋅⋅⋅Example: https://www.imdb.com/title/tt0111161 for Shawshank Redemption
 
  - https://www.imdb.com/title/{film_id}/fullcredits *: used to retrieve full cast & crew. Replace {film_id} with integer movie ID value*
-  - Example: https://www.imdb.com/title/tt0111161/fullcredits for Shawshank Redemption full cast & crew
+  ⋅⋅⋅Example: https://www.imdb.com/title/tt0111161/fullcredits for Shawshank Redemption full cast & crew
 
 The **film IDs are first retrieved from the *soupified* page from step 2**, as they are provided in the html in the **'wlb_ribbon'** class. With these 250 x film IDs we proceed to scrape the genre and cast data we require. The code block, below, is clearly commented.
 
@@ -199,9 +199,14 @@ We have two data sets:
 2. **film_ids**: contains the following attributes for each movie ([filmID , filmID_castURL , filmID_homePageURL, genre_clean])
 2. **base_castAndCrew**: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
 
-&nbsp;
-# EXPLORATORY ANALYSIS
-## Part One : Distribution of Top 250 movie ratings
+
+## Part 4 (of 5): Data Exploration, visualising rating distributions
+
+I began by exploring the movie ratings themselves; asking questions of the data such as *Is there a linear relationsip between movie ranking and movie rating?* and *Which movie genres typically have higher ratings?*.
+
+The boxplot below
+
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/4.embed"></iframe>
 
 Looking at the two ratings charts, we deduce that across the Top 250 movies:
   - the median movie rating is 8.2
@@ -213,7 +218,7 @@ Looking at the two ratings charts, we deduce that across the Top 250 movies:
   - Perhaps, suprisingly, Music and Horror movies have the highest median rankings; but unsuprisgly each of these genres have just five contributing movies
   - X% of top movies are either dramas, x or y
   
-## Part Two : Who really are the best actors?
+## Part 5 (of 5): Data Exploration, *Who really are the best actors?*
 
   - So this was the bit I was most interested in. Here we take a look at which actors and actresses appear (in the cast & crew listings) across all 250 movies, how many movies they appeared in and what those films were?
   - in the code snippet below we create an interactive plotly chart that allows the user to select the top N actors/actresses with the most film features. The film start with the highest number of features appear on the far left of the chart and appears in descending order.
@@ -221,5 +226,5 @@ Looking at the two ratings charts, we deduce that across the Top 250 movies:
   - Interestingly, John Ratzenberger has 'appeared' in more of the Top 250 movies than any other actor - a whopping 12 x movies. However, 10 x of these were animation films - so he didn't even 'appear' in them at all. Bess Flowers, in position two, featured in 10 of the Top 250 movies but all before the 1970s.
   - In third position, Joseph Oliveira, was an quirky find - whilst he's featured in 9 of the Top 250 movies, he's only played 'supporting' or uncredited roles in each. For example: Dark Knight - a walk on officer, https://www.imdb.com/title/tt0468569/fullcredits?ref_=tt_cl_sm#cast uncredited role as 'Marciano' in Goodfellas https://www.imdb.com/title/tt0099685/fullcredits?ref_=tt_cl_sm#cast The Departed, again an uncredited Officer Court Room Attendant (uncredited) in Wolf of Wall Street https://www.imdb.com/title/tt0993846/fullcredits
   
-# SUMMARY & FINAL THOUGHTS  
+## Summary & Final Thoughts
   
