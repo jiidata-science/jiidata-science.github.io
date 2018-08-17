@@ -13,9 +13,6 @@ classes: wide
 
 ---
 
-# ============================ WORK-IN-PROGRESS
-
-
 ## Introduction & Purpose
 
 So here it is...my first data science article (hopefully not my last). I decided to kick-off my series with a look at IMDb's film and cast listings, to identify which actors feature in the most top rated movies; to find out for myself who the 'real' movie stars are? This article includes as selection of Python code-blocks aswell as visualisations that help us to explore and understand the data.
@@ -69,7 +66,7 @@ init_notebook_mode(connected=True)
 We start by using *urlib3* and *beautifulSoup* libraries to scrape the Top 250 movies from IMDb's [Top 250 web page](https://www.imdb.com/chart/top).
 We capture each movie title, along with it's official IMDb ranking and rating. All required data is stored within the table **'chart full-width'** class attribute, on the IMDb web page, highlighted in the printscreen below.
 
-![alt text](https://github.com/jiidata-science/Imdb_Top_Actors/blob/master/Images/TopRatedMovies.png "Top Rated Movies Table")
+![alt text](https://raw.githubusercontent.com/jiidata-science/Imdb_Top_Actors/master/Images/TopRatedMovies.png "Top Rated Movies Table")
 
 The code block, below, scrapes the tabulated data and stores it as lists (in the table_data list object).
 
@@ -118,9 +115,8 @@ Print the first few values stored in *table_data*
     #5|'12 Angry Men'|1957|8.9
 
 &nbsp;
+## Part 3 (of 5): Data collection, scraping movie genre & movies cast & crew
 
-# DATA COLLECTION (Part Two)
-## Scrape movie Genre & Cast/Crew
 
 Each movie has it's own title landing page, covering a summary of information and a separate page for viewing the full cast/crew list per feature. Providing that you use the Imdb movie Id (i.e. an ID specific to Imdb) it's very simple to manipulate standard URLs and pull the information need:
 
