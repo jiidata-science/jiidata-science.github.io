@@ -206,7 +206,7 @@ I began by exploring the movie ratings themselves; asking questions of the data 
 
 The boxplot below
 
-<iframe width="900" height="400" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/4.embed"></iframe>
+<iframe width="900" height="500" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/4.embed"></iframe>
 
 Looking at the two ratings charts, we deduce that across the Top 250 movies:
   - the median movie rating is 8.2
