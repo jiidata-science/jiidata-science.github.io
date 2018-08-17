@@ -215,9 +215,9 @@ Extending on the above point, movie ratings do increase linearly with movie rank
 
 ## Part 5 (of 5): Data Exploration, *Who really are the best actors?*
 
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/8.embed"></iframe>
+<iframe width="900" height="400" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/8.embed"></iframe>
 
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/10.embed"></iframe>
+<iframe width="900" height="500" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/10.embed"></iframe>
 
 
   - So this was the bit I was most interested in. Here we take a look at which actors and actresses appear (in the cast & crew listings) across all 250 movies, how many movies they appeared in and what those films were?
