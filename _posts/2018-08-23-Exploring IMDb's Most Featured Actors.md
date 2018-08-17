@@ -26,7 +26,7 @@ So why have I chosen to explore this relatively random topic? Primarily, I wante
 
   * We start by scraping the Top 250 rated movies and all cast/crew, from IMDb.com (**[using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)**)
   * We process and clean the scraped data (**[using Pandas](https://pandas.pydata.org/)**)
-  * Then we start to **explore and visualise the data** ([with Plotly](https://plot.ly/python/)) by:
+  * Then we start to **explore and visualise the data** (**[with Plotly](https://plot.ly/python/)**) by:
     * Looking at the distribution of Top 250 film ratings
     * Understanding which film genres are more likely to have higher ratings, and
     * Identifying which actors appear in the most top rated films
@@ -69,7 +69,7 @@ init_notebook_mode(connected=True)
 We start by using *urlib3* and *beautifulSoup* libraries to scrape the Top 250 movies from IMDb's [Top 250 web page](https://www.imdb.com/chart/top).
 We capture each movie title, along with it's official IMDb ranking and rating. All required data is stored within the table **'chart full-width'** class attribute, on the IMDb web page, highlighted in the printscreen below.
 
-![](https://github.com/jiidata-science/Imdb_Top_Actors/blob/master/Images/TopRatedMovies.png)
+![alt text](https://github.com/jiidata-science/Imdb_Top_Actors/blob/master/Images/TopRatedMovies.png "Top Rated Movies Table")
 
 The code block, below, scrapes the tabulated data and stores it as lists (in the table_data list object).
 
