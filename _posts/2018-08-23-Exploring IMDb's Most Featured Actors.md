@@ -24,12 +24,12 @@ So why have I chosen to explore this relatively random topic? Primarily, I wante
 
 **In this blog:**
 
-  * We start with scraping IMDb film, actors/actress data (using BeautifulSoup)
-  * We process and clean the captured data (using Pandas)
-  * Then (more interestingly) we start to pull explore the data by:
+  * We start by scraping the Top 250 rated movies and all cast/crew, from IMDb.com **([using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/))**
+  * We process and clean the scraped data **([using Pandas](https://pandas.pydata.org/))**
+  * Then we start to **explore and visualise the data ([with Plotly](https://plot.ly/python/))** by:
     * Looking at the distribution of Top 250 film ratings
     * Understanding which film genres are more likely to have higher ratings, and
-    * Identifying which actors/actresses appear in the most top rated films
+    * Identifying which actors appear in the most top rated films
 
 Ultimately, this blog culminates in identifying *which actors feature in the most Top 250 films?*. I began this project under the naive assumption that such actors would be well-known household names; the likes of *Katharine Hepburn, Robert De Niro* and *Jack Nicholson* - similar to IMDb's list of [100 greatest actors & actresses of all time](https://www.imdb.com/list/ls053085147/) - **BUT this analysis provides some suprising outcomes...enjoy!**
 
