@@ -221,11 +221,11 @@ Extending on the above point, movie ratings do increase linearly with movie rank
 
 So this was the bit I was most interested in. Here we take a look at which actors and actresses appear (in the cast & crew listings) across all 250 movies, how many movies they appeared in and what those films were?
 
-<iframe width="950" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/12.embed"></iframe>
+<iframe width="900" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/8.embed"></iframe>
 
 In the code snippet below we create an interactive plotly chart that allows the user to select the top N actors/actresses with the most film features. The film start with the highest number of features appear on the far left of the chart and appears in descending order.
 
-<iframe width="900" height="580" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/10.embed"></iframe>
+<iframe width="950" height="580" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/12.embed"></iframe>
 
 
 Perhaps I'm not quite the film buff I first thought but, to my suprise, the first actor I had heard of was in position five - Robert De Niro - who has appeared in eight of the top 250 films and is undoubtably a household name. Interestingly, John Ratzenberger has 'appeared' in more of the Top 250 movies than any other actor - a whopping 12 x movies. However, 10 x of these were animation films - so he didn't even 'appear' in them at all. Bess Flowers, in position two, featured in 10 of the Top 250 movies but all before the 1970s.
