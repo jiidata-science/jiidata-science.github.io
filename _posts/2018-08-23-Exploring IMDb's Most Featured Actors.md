@@ -28,7 +28,7 @@ So why did I chose to explore this random and niche topic? Well, primarily I wan
 ### What we'll be looking at
 
   * [Part 1](##Part-1-(of-5):-Importing-Required-Python-Libraries) (of 5): Importing Required Python Libraries
-  * Part 2 (of 5): Data collection - Scraping IMDb's Top 250 Rated Movies, **[using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)**
+  * [Part 2](##-Part 2-(of-5):-Data-collection---scraping-IMDb's-Top-250-rated-movies) (of 5): Data collection - Scraping IMDb's Top 250 Rated Movies, **[using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)**
   * Part 3 (of 5): Data collection - Scraping Movie Genre & Full Cast + Crew, **[using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)**
   * Part 4 (of 5): Data Exploration - Visualising Movie Ratings, with [Pandas](https://pandas.pydata.org/) and [Plotly](https://plot.ly/python/)]
   * Part 5 (of 5): Data Exploration - *Who Really Are The Best Actors?*, with [Pandas](https://pandas.pydata.org/) and [Plotly](https://plot.ly/python/)]
