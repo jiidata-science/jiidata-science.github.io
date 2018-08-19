@@ -68,7 +68,7 @@ init_notebook_mode(connected=True)
 ## Part 2 (of 5): Data collection - Scraping IMDb's Top 250 Rated Movies
 *Data captured on 27th July 2018*
 
-We begun by using *urlib3* and *beautifulSoup* libraries to scrape the Top 250 movies from IMDb's [Top 250 movie charts](https://www.imdb.com/chart/top). We captured each movie title, along with it's official IMDb ranking and rating. All the data we required could be found within the HTML table with class = **'chart full-width'**, on the IMDb web page (highlighted in the printscreen below).
+We begun by using *urlib3* and *beautifulSoup* libraries to scrape the Top 250 movies from IMDb's [Top 250 movie charts](https://www.imdb.com/chart/top). We captured each movie title, along with it's official IMDb ranking and rating. All the data we required could be found within the html table with class = **'chart full-width'**, on the IMDb web page (highlighted in the printscreen below).
 
 ![alt text](https://raw.githubusercontent.com/jiidata-science/Imdb_Top_Actors/master/Images/TopRatedMovies.png "Top Rated Movies Table")
 
@@ -105,7 +105,7 @@ for row in rows:
     table_data.append([movie_rank, movie_name, movie_year, movie_rating]) 
 ```
   
-Print the first few values stored in *table_data*
+Printing the first few values stored in *table_data* so you can see the output data.
 
     table_data[:5] # print the top 5 results
 
@@ -121,17 +121,15 @@ Print the first few values stored in *table_data*
 <a name="part3"></a>
 ## Part 3 (of 5): Data collection - Scraping Movie Genre & Full Cast + Crew
 
-Having captured all Top Movies, and their corresponding Movie IDs in step 2, we now focus on capturing the movie **genre** and **cast and crew** for each movie. This data will allow us to explore actors that feature across multiple top rated movies.
+Having captured all of the top rated movie names, and some additional information, I the focused on capturing the **genre** and **full cast and crew** for each movie. This data allowed us to explore actors that featured across multiple top rated movies.
 
-On IMDb.com, each listed movie has it's own title landing page, covering a summary of movie information, and a separate page for viewing the corresponding full cast & crew. Providing that you use the Imdb movie Id (i.e. an ID specific to Imdb) it's very simple to manipulate IMDb's page URLs to retrieve the information we're after:
+On IMDb.com, each listed movie has its own landing page, covering a summary of movie information, and a separate page for viewing the corresponding full cast & crew. Providing that you use the IMDb 'film_id' (i.e. a bespoke ID that IMDb have created to uniquely store movie-level data) it's very simple to manipulate a couple of IMDb page URLs to retrieve the information we're after:
 
- - https://www.imdb.com/title/{film_id} *: used to retrieve film genre. Replace {film_id} with integer movie ID value*
-  ⋅⋅⋅Example: https://www.imdb.com/title/tt0111161 for Shawshank Redemption
+ - https://www.imdb.com/title/{film_id} *: used to retrieve film genre. Replace {film_id} with integer movie ID value* (example: https://www.imdb.com/title/tt0111161 for Shawshank Redemption).
 
- - https://www.imdb.com/title/{film_id}/fullcredits *: used to retrieve full cast & crew. Replace {film_id} with integer movie ID value*
-  ⋅⋅⋅Example: https://www.imdb.com/title/tt0111161/fullcredits for Shawshank Redemption full cast & crew
+ - https://www.imdb.com/title/{film_id}/fullcredits *: used to retrieve full cast & crew. Replace {film_id} with integer movie ID value* (example: https://www.imdb.com/title/tt0111161/fullcredits for Shawshank Redemption full cast & crew).
 
-The **film IDs are first retrieved from the *soupified* page from step 2**, as they are provided in the html in the **'wlb_ribbon'** class. With these 250 x film IDs we proceed to scrape the genre and cast data we require. The code block, below, is clearly commented.
+We actually already had the 'film_IDs' in the web page requested in part 2 - we just hadn't stored them yet. These ids were found in the html table structure within the **'wlb_ribbon'** class. Once we'd captured all film_IDs, we iteratively constructed the movie-specific URLs and scraped the data we were after, illustrated in the code block, below.
 
 ``` python
 # Empty list objects. We'll be storing scraped data in this
@@ -182,7 +180,7 @@ for idx, link in enumerate(links_class):
     list_castAndCrew, html_castAndCrew, soup_castAndCrew, table_castAndCrew
 ``` 
 
-We print to the log for each 25th iteration (just so we have an indication of progress).
+We printed to the log for each 25th iteration (just so we have an indication of progress).
 
     #[INFO] Scraping film no. 25 of 250
     #[INFO] Scraping film no. 50 of 250
@@ -195,13 +193,14 @@ We print to the log for each 25th iteration (just so we have an indication of pr
     #[INFO] Scraping film no. 225 of 250
     #[INFO] Scraping film no. 250 of 250
 
-At this point I all required data had been captured. We're now ready to start exploring!
 
-We have two data sets:
+Having completed our data collection, we had the following local datasets:
 
 1. **table_data** : contains the following attributes for each movie ([movie_rank, movie_name, movie_year, movie_rating])
 2. **film_ids**: contains the following attributes for each movie ([filmID , filmID_castURL , filmID_homePageURL, genre_clean])
 2. **base_castAndCrew**: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
+
+Now we were able to start exploring!
 
 <a name="part4"></a>
 ## Part 4 (of 5): Data Exploration - Visualising Movie Ratings
@@ -219,18 +218,34 @@ Extending on the above point, movie ratings do increase linearly with movie rank
 <a name="part5"></a>
 ## Part 5 (of 5): Data Exploration - *Who Really Are The Best Actors?*
 
-So this was the bit I was most interested in. Here we take a look at which actors and actresses appear (in the cast & crew listings) across all 250 movies, how many movies they appeared in and what those films were?
+So this was the bit I was most interested in. Here we take a look at how many, top rated, movies each actor appeared in.
+
+Firstly, I looked at the frequency of movie features per actor. Each actor was assigned to a frequency bucket (i.e. 1, 2, 3, 4+) depending on the number of top rated movies they'd featured in. 
+
+The pie chart below illustrates this split, for the full **15,013 (distinct) cast & crew members** that featured across the 250 movies. From the chart we deduce that **90% of actors featured in just one movie**, with just **0.88% of actors featuring in 4 or more movies**. Interesting? Perhaps not, but I then started to put names to these numbers.
+
+You can find the code for this visualisation on [Github](https://github.com/jiidata-science/Imdb_Top_Actors).
 
 <iframe width="900" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/8.embed"></iframe>
 
-In the code snippet below we create an interactive plotly chart that allows the user to select the top N actors/actresses with the most film features. The film start with the highest number of features appear on the far left of the chart and appears in descending order.
+We then created an interactive plotly chart that allows the user to see the actors with the highest movie features, with the list of movies available on hover. I chose to only plot actors that had featured in atleast five movies as anymore and the plot would be unreadable (and I was too lazy to created a input range or value filter). The plot starts begins with the highest number of features on the far left of the chart, progressing in descending order.
 
 <iframe width="950" height="580" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/12.embed"></iframe>
 
+So what did I deduce from this chart? Well, perhaps I'm not quite the film buff I first thought but:
 
-Perhaps I'm not quite the film buff I first thought but, to my suprise, the first actor I had heard of was in position five - Robert De Niro - who has appeared in eight of the top 250 films and is undoubtably a household name. Interestingly, John Ratzenberger has 'appeared' in more of the Top 250 movies than any other actor - a whopping 12 x movies. However, 10 x of these were animation films - so he didn't even 'appear' in them at all. Bess Flowers, in position two, featured in 10 of the Top 250 movies but all before the 1970s.
+- to my suprise, the first actor I had heard of was in position five - Robert De Niro - who has appeared in eight of the top 250 films (and is undoubtably a household name).
 
-In third position, Joseph Oliveira, was an quirky find - whilst he's featured in 9 of the Top 250 movies, he's only played 'supporting' or 'uncredited' roles in each. To list a few examples, Joseph featured as a [walk on officer in Dark Knight (2008)](https://www.imdb.com/title/tt0468569/fullcredits?ref_=tt_cl_sm#cast); held an uncredited role as ['Marciano' in Goodfellas (1990)](https://www.imdb.com/title/tt0099685/fullcredits?ref_=tt_cl_sm#cast); and **again** an [uncredited Officer Court Room Attendant in Wolf of Wall Street (2013)](https://www.imdb.com/title/tt0993846/fullcredits).
+- in position one, **John Ratzenberger** has 'appeared' in more of the Top 250 movies than any other 'actor' - a whopping 12 movies. Interetingly, **10 of these were animation films**, so he didn't even 'appear' in them at all.
+
+- **Bess Flowers**, in position two, featured in 10 movies all published before the 1970s.
+
+- in third position, **Joseph Oliveira**, was a peculiar find. Whilst he'd featured in 9 of the Top 250 movies, he'd only played **supporting** or **'uncredited'** roles in each. To list a few examples, Joseph featured as a [walk on officer in Dark Knight (2008)](https://www.imdb.com/title/tt0468569/fullcredits?ref_=tt_cl_sm#cast); held an uncredited role as ['Marciano' in Goodfellas (1990)](https://www.imdb.com/title/tt0099685/fullcredits?ref_=tt_cl_sm#cast); and **again** an [uncredited Officer Court Room Attendant in Wolf of Wall Street (2013)](https://www.imdb.com/title/tt0993846/fullcredits). He's been in so many great modern films but there's no chance I'd know who he was if he passed me on the street.
+
+- there are also plently of expected actors, including Harrison Ford (6th), Gino Corrado (7th), Morgan Freeman (10th) to name a few.
+
+You can find the code for this visualisation on [Github](https://github.com/jiidata-science/Imdb_Top_Actors).
+
   
 ## Summary & Final Thoughts
   
