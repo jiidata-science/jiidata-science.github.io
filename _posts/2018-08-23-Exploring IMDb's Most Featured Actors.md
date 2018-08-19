@@ -27,19 +27,16 @@ So why did I chose to explore this random and niche topic? Well, primarily I wan
 
 ### What we'll be looking at
 
-**In this blog:**
-
-  * We start by scraping the Top 250 rated movies and all cast/crew, from IMDb.com (**[using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)**)
-  * We process and clean the scraped data (**[using Pandas](https://pandas.pydata.org/)**)
-  * Then we start to **explore and visualise the data** (**[with Plotly](https://plot.ly/python/)**) by:
-    * Looking at the distribution of Top 250 film ratings
-    * Understanding which film genres are more likely to have higher ratings, and
-    * Identifying which actors appear in the most top rated films
+  * [Part 1](## Part-1-(of-5):-Importing-Required-Python-Libraries) (of 5): Importing Required Python Libraries
+  * Part 2 (of 5): Data collection - Scraping IMDb's Top 250 Rated Movies, **[using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)**
+  * Part 3 (of 5): Data collection - Scraping Movie Genre & Full Cast + Crew, **[using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)**
+  * Part 4 (of 5): Data Exploration - Visualising Movie Ratings, with [Pandas](https://pandas.pydata.org/) and [Plotly](https://plot.ly/python/)]
+  * Part 5 (of 5): Data Exploration - *Who Really Are The Best Actors?*, with [Pandas](https://pandas.pydata.org/) and [Plotly](https://plot.ly/python/)]
 
 
 *Additional note: whilst IMDb does readily offer APIs for accessing movie information (which seemed a little suprising to me) they do offer a number of [static datasets](https://datasets.imdbws.com/). I chose **not** use these datasets and scraped what I needed directly from the IMDb.com.*
 
-## Part 1 (of 5): Required Python Libraries
+## Part 1 (of 5): Importing Required Python Libraries
 ``` python
 
 # libraries for requesting and scraping web pages
@@ -67,7 +64,7 @@ init_notebook_mode(connected=True)
 ```
 
 
-## Part 2 (of 5): Data collection, scraping IMDb's Top 250 rated movies
+## Part 2 (of 5): Data collection - scraping IMDb's Top 250 rated movies
 *Data captured on 27th July 2018*
 
 We start by using *urlib3* and *beautifulSoup* libraries to scrape the Top 250 movies from IMDb's [Top 250 web page](https://www.imdb.com/chart/top).
@@ -122,7 +119,7 @@ Print the first few values stored in *table_data*
     #5|'12 Angry Men'|1957|8.9
 
 
-## Part 3 (of 5): Data collection, scraping movie genre & cast + crew
+## Part 3 (of 5): Data collection - scraping movie genre & cast + crew
 
 Having captured all Top Movies, and their corresponding Movie IDs in step 2, we now focus on capturing the movie **genre** and **cast and crew** for each movie. This data will allow us to explore actors that feature across multiple top rated movies.
 
@@ -207,7 +204,7 @@ We have two data sets:
 2. **base_castAndCrew**: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
 
 
-## Part 4 (of 5): Data Exploration, visualising rating distributions
+## Part 4 (of 5): Data Exploration - visualising rating distributions
 
 I began by exploring the movie ratings themselves; asking questions of the data such as **Is there a linear relationsip between movie ranking and movie rating?** and **Which movie genres typically have higher ratings?**.
 
