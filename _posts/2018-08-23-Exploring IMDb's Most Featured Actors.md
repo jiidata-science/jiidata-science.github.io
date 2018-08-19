@@ -15,9 +15,17 @@ classes: wide
 
 ## Introduction & Purpose
 
-So here it is...my first data science article (hopefully not my last). I decided to kick-off my series with a look at IMDb's film and cast listings, to identify which actors feature in the most top rated movies; to find out for myself who the 'real' movie stars are? This article includes as selection of Python code-blocks aswell as visualisations that help us to explore and understand the data.
+So here it is...my first article (hopefully not my last). I decided to kick-off my series with a look at [IMDb's Top 250 rated movies](https://www.imdb.com/chart/top). More specifically, in this article, we scrape IMDb's top rated movies, along with their corresponding cast & crew listings, and explore who the "real movie superstars" are - essentially, *which actors feature in the most/multiple top rated movies?* 
 
-So why have I chosen to explore this relatively random topic? Primarily, I wanted to demonstrate the use of web scraping technology to collect data that isn't otherwise readily available in the desired format. The second reason was merely because I enjoy watching movies...hardly a unique interest.
+I began this project with the naive assumption that these "superstars" would all be well-known household names; the likes of *Katharine Hepburn, Robert De Niro* and *Jack Nicholson* - similar to IMDb's list of [100 greatest actors & actresses of all time](https://www.imdb.com/list/ls053085147/) - **BUT this analysis resulted in some suprising finds!**
+
+For this project we used Python, and a selection of libraries, for data collection, exploration and visualisation. This article includes a selection of Python code-blocks and visualisations that help us to explore and draw insights from the data. The full codeset is available on [Github](https://github.com/jiidata-science/Imdb_Top_Actors) as a Jupyter notebook.
+
+### Motivation
+
+So why did I chose to explore this random and niche topic? Well, primarily I wanted to demonstrate use of web scraping technology to collect data that wasn't otherwise readily available in the desired format (yawn!). The second reason was merely because I enjoy watching movies - *hardly a unique interest* - so, I was inately interested in the data itself.
+
+### What we'll be looking at
 
 **In this blog:**
 
@@ -28,7 +36,6 @@ So why have I chosen to explore this relatively random topic? Primarily, I wante
     * Understanding which film genres are more likely to have higher ratings, and
     * Identifying which actors appear in the most top rated films
 
-Ultimately, this blog culminates in identifying *which actors feature in the most Top 250 films?*. I began this project under the naive assumption that such actors would be well-known household names; the likes of *Katharine Hepburn, Robert De Niro* and *Jack Nicholson* - similar to IMDb's list of [100 greatest actors & actresses of all time](https://www.imdb.com/list/ls053085147/) - **BUT this analysis provides some suprising outcomes...enjoy!**
 
 *Additional note: whilst IMDb does readily offer APIs for accessing movie information (which seemed a little suprising to me) they do offer a number of [static datasets](https://datasets.imdbws.com/). I chose **not** use these datasets and scraped what I needed directly from the IMDb.com.*
 
