@@ -28,10 +28,10 @@ So why did I chose to explore this random and niche topic? Well, primarily I wan
 ### What we'll be looking at
 
   * <a href="#part1">Part 1</a> (of 5): Importing Required Python Libraries
-  * <a href="#part2">Part 1</a> (of 5): Data collection - Scraping IMDb's Top 250 Rated Movies, [using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
-  * <a href="#part3">Part 1</a> (of 5): Data collection - Scraping Movie Genre & Full Cast + Crew, [using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
-  * <a href="#part4">Part 1</a> (of 5): Data Exploration - Visualising Movie Ratings, with [Pandas](https://pandas.pydata.org/) and [Plotly](https://plot.ly/python/)
-  * <a href="#part5">Part 1</a> (of 5): Data Exploration - *Who Really Are The Best Actors?*, with [Pandas](https://pandas.pydata.org/) and [Plotly](https://plot.ly/python/)
+  * <a href="#part2">Part 2</a> (of 5): Data collection - Scraping IMDb's Top 250 Rated Movies, [using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+  * <a href="#part3">Part 3</a> (of 5): Data collection - Scraping Movie Genre & Full Cast + Crew, [using BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+  * <a href="#part4">Part 4</a> (of 5): Data Exploration - Visualising Movie Ratings, with [Pandas](https://pandas.pydata.org/) and [Plotly](https://plot.ly/python/)
+  * <a href="#part5">Part 5</a> (of 5): Data Exploration - *Who Really Are The Best Actors?*, with [Pandas](https://pandas.pydata.org/) and [Plotly](https://plot.ly/python/)
 
 
 *Additional note: whilst IMDb does NOT readily offer APIs for accessing movie information (which seemed a little suprising to me) they do offer a number of [static datasets](https://datasets.imdbws.com/). I chose **not** use these datasets and scraped what I needed directly from the IMDb.com.*
