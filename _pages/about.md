@@ -11,8 +11,11 @@ I completed my undergraduate degree, in Mechanical Engineering, at University of
 Sadly being a Data Scientist doesn't always make for easy introductory conversation in non-tech crowds. It typically goes along the lines of:
 
 > New person: "Enough about me. So, what do you do for a living?"
+
 > Me: "I'm actually a Data Scientist at *<insert current company name here>*"
+
 > New person: "Ah (*sounds of interest*). So what is a Data Scientist and what sort of work do you do?"
+
 > Me: "Hmmmmmm. I suggest you Google it."
 
 As far as work is concerned, I'm particularly interested in leveraging vast amounts of data and predictive modelling to deliver actual business value - whether that's incremental revenue or improved operational efficiencies.
