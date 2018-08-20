@@ -159,7 +159,7 @@ for idx, movieID in enumerate(lst_movieIds):
         print("[INFO] Scraping movie no. {0} of {1}".format(counter,len(lst_movieIds)))
         
     # Part 1 ----------------------------------------
-    # construct the movie title page and cast/crew page URLs (using the movieID)
+    # Construct the movie title page and cast/crew page URLs (using the movieID)
     
     movieID_homePageURL = "https://www.imdb.com/title/{0}".format(movieID) # used to retrieve genre
     movieID_castURL = "https://www.imdb.com/title/{0}/fullcredits".format(movieID) # used to retrieve full cast
@@ -213,9 +213,9 @@ I wrote a code statement, above, that printed to the log for each 25th iteration
 
 Having completed our data collection, we had the following local datasets:
 
-1. **```ds_top250Movies```**: contains the following attributes for each movie ([movieID, movie_rank, movie_name, movie_year, movie_rating])
-2. **```ds_movieGenre```**: contains the following attributes for each movie ([movieID , filmID_castURL , filmID_homePageURL, genre_clean])
-2. **```ds_castAndCrew```**: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
+1. **ds_top250Movies**: contains the following attributes for each movie ([movieID, movie_rank, movie_name, movie_year, movie_rating])
+2. **ds_movieGenre**: contains the following attributes for each movie ([movieID , filmID_castURL , filmID_homePageURL, genre_clean])
+2. **ds_castAndCrew**: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
 
 Then we were able to start exploring!
 
@@ -227,8 +227,6 @@ I began by exploring the movie ratings themselves; asking questions of the data 
 The boxplot below illustrates the distribution of IMDb movie ratings. With a median movie rating of 8.2 and an upper fence of 8.8, the boxplot identifies seven 'outliers' that have anomalously high ratings. To no suprise, these top rated films include well-known favourites, such as [1] The Shawshank Redemption, [2] The Godfather, [3] The Godfather: Part II, [4] The Dark Knight, and [5] 12 Angry Men. Take a look for yourself...
 
 <iframe width="900" height="500" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/4.embed"></iframe>
-
-Extending on the above point, movie ratings **do not decrease linearly** with movie rankings.
 
 The chart below (left) plots movie rating versus movie ranking, for all 250 movies. The adjacent chart (below right) attempts to identify a model that best describes the relationship between movie rating and rank (note: I used ```scipy``` to fit these models). We can see that a linear model explains the 'general' relationship (as you'd expect, with an R-squared of 0.82) however it particularly understates the sharp increase in ratings for top ranked movies. Again as you'd expect, the quadratic (R-squared of 0.92) and cubic (R-squared of 0.96) functions provide better representations of the relationship, as they provide a much better fit for top ranked movies.
 
@@ -247,7 +245,7 @@ The pie chart below illustrates this split, for the full **15,013 (distinct) cas
 
 <iframe width="900" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/8.embed"></iframe>
 
-The interactive plotly chart allows us to see the actors with the highest movie features, with the list of movies available on hover over. I chose to only plot actors that had featured in five or more movies as anymore and the plot would be unreadable (and I was too lazy to created a user defined input range or value filter). The plot begins with the highest number of movie features on the far left of the chart, ranked descending order.
+The interactive plotly chart (below) allows us to see the actors with the highest movie features, with the list of movies available on hover over. I chose to only plot actors that had featured in five or more movies as anymore and the plot would be unreadable (and I was too lazy to created a user defined input range or value filter). The plot begins with the highest number of movie features on the far left of the chart, ranked descending order.
 
 <iframe width="950" height="580" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/12.embed"></iframe>
 
