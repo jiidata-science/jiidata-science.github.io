@@ -5,7 +5,7 @@ date: 2018-08-23T11:48:41-04:00
 header:
   overlay_color: "#000"
   overlay_filter: "0.6"
-  overlay_image: /assets/images/site/DataBlog_titleImage.png
+  overlay_image: /assets/images/posts/imdb/IMDb_PostTitle.png
 excerpt: "Scraping, exploring & visualising most featured actors in IMDb's Top 250 movies, with BeautifulSoup, Pandas & Plotly"
 author_profile: true
 author: Jez Irving
