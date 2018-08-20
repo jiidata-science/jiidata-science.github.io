@@ -265,13 +265,15 @@ Why not take a look yourself!
 
 You can find the code for this visualisation on [Github](https://github.com/jiidata-science/Imdb_Top_Actors).
 
-## Summary & Final Thoughts
+## Outcomes
 
-1. In this article we demonstrated using beautifulSoup to pull subsets of webpage data using selections based on html tags and attributes. The python beautifulSoup package makes it super easy to programmatically collect data from web pages. 
+Final thoughts on:
 
-2. The top rated IMDb movies (say the top 7 or 8) are really head and shoulders above the others. The sharp increase in ratings for the top 7 ranking movies suggest these are just 'that bit better'
+- **Scraping webpage data** - in this article we demonstrated using beautifulSoup to pull subsets of webpage data using selections based on html tags and attributes. The python beautifulSoup package makes it super easy to programmatically collect data from web pages. 
 
-3. We identified the top featuring actors across all top 250 movies. Interestingly, the actor with the most features (12) hadn't even appeared in 10 of the 12 - they were animation films, such as Toy Story. I guess the (sarcastic) conclusion here is that you should look for the Joseph Oliveria's next uncreditted feature - it's bound to be a smash hit!
+- **The 'must watch' movies** - the top rated IMDb movies (say the top 7 or 8) are really head and shoulders above the others. The sharp increase in ratings for the top 7 ranking movies suggest these are just 'that bit better'
+
+- **The movie stars to watch out for** - we identified the top featuring actors across all top 250 movies. Interestingly, the actor with the most features (12) hadn't even appeared in 10 of the 12 - they were animation films, such as Toy Story. I guess the (sarcastic) conclusion here is that you should look for the Joseph Oliveria's next uncreditted feature - it's bound to be a smash hit!
 
 You can dive into the code with [my Github repo](https://github.com/jiidata-science/Imdb_Top_Actors).
 
