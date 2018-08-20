@@ -200,56 +200,59 @@ I wrote a code statement, above, that printed to the log for each 25th iteration
 
 Having completed our data collection, we had the following local datasets:
 
-1. ```python table_data```: contains the following attributes for each movie ([movie_rank, movie_name, movie_year, movie_rating])
+1. ```table_data```: contains the following attributes for each movie ([movie_rank, movie_name, movie_year, movie_rating])
 2. ```film_ids```: contains the following attributes for each movie ([filmID , filmID_castURL , filmID_homePageURL, genre_clean])
 2. ```base_castAndCrew```: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
 
-Now we were able to start exploring!
+Then we were able to start exploring!
 
 <a name="part4"></a>
 ## Part 4 (of 5): Data Exploration - Visualising Movie Ratings
 
 I began by exploring the movie ratings themselves; asking questions of the data such as **Is there a linear relationsip between movie ranking and movie rating?** and **Which movie genres typically have higher ratings?**.
 
-The boxplot below illustrates the distribution of IMDb movie ratings. With a median movie rating of 8.2 and an upper fence of 8.8, the boxplot identifies seven 'outliers' that have anomalously high ratings. To no suprise, these top rated films include well-known favourites - including [1] The Shawshank Redemption, [2] The Godfather, [3] The Godfather: Part II, [4] The Dark Knight, and [5] 12 Angry Men.
+The boxplot below illustrates the distribution of IMDb movie ratings. With a median movie rating of 8.2 and an upper fence of 8.8, the boxplot identifies seven 'outliers' that have anomalously high ratings. To no suprise, these top rated films include well-known favourites, such as [1] The Shawshank Redemption, [2] The Godfather, [3] The Godfather: Part II, [4] The Dark Knight, and [5] 12 Angry Men. Take a look for yourself...
 
 <iframe width="900" height="500" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/4.embed"></iframe>
 
-Extending on the above point, movie ratings do increase linearly with movie rankings. The cumulative distribution, below, presents the distribution of movie ratings slightly differently. Form this chart we deduce that 95% of movies have a rating between 8.2 - 8.7 (range: 0.5), whilst the remaining 5% have much higher scores between 8.7 to 9.2 (range: 0.5)
+Extending on the above point, movie ratings **do not decrease linearly** with movie rankings.
+
+The chart below (left) plots movie rating versus movie ranking, for all 250 movies. The adjacent chart (below right) attempts to identify a model that best describes the relationship between movie rating and rank (note: I used ```scipy``` to fit these models). We can see that a linear model explains the 'general' relationship (as you'd expect, with an R-squared of 0.82) however it particularly understates the sharp increase in ratings for top ranked movies. Again as you'd expect, the quadratic (R-squared of 0.92) and cubic (R-squared of 0.96) functions provide better representations of the relationship, as they provide a much better fit for top ranked movies.
 
 <iframe width="900" height="600" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/6.embed"></iframe>
+
+You can find the code for these, and other, visualisation on [Github](https://github.com/jiidata-science/Imdb_Top_Actors).
 
 <a name="part5"></a>
 ## Part 5 (of 5): Data Exploration - *Who Really Are The Best Actors?*
 
-So this was the bit I was most interested in. Here we take a look at how many, top rated, movies each actor appeared in.
+So this was the bit I was most interested in. Here we take a look at how many, top rated , movies each actor appeared in.
 
 Firstly, I looked at the frequency of movie features per actor. Each actor was assigned to a frequency bucket (i.e. 1, 2, 3, 4+) depending on the number of top rated movies they'd featured in. 
 
-The pie chart below illustrates this split, for the full **15,013 (distinct) cast & crew members** that featured across the 250 movies. From the chart we deduce that **90% of actors featured in just one movie**, with just **0.88% of actors featuring in 4 or more movies**. Interesting? Perhaps not, but I then started to put names to these numbers.
-
-You can find the code for this visualisation on [Github](https://github.com/jiidata-science/Imdb_Top_Actors).
+The pie chart below illustrates this split, for the full **15,013 (distinct) cast & crew members** that featured across the 250 movies. Here we see that **90% of actors featured in just one movie**, with **just under 1% of actors featuring in 4 or more movies**. Interesting? Perhaps not, but I then started to put names to these numbers.
 
 <iframe width="900" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/8.embed"></iframe>
 
-We then created an interactive plotly chart that allows the user to see the actors with the highest movie features, with the list of movies available on hover. I chose to only plot actors that had featured in atleast five movies as anymore and the plot would be unreadable (and I was too lazy to created a input range or value filter). The plot starts begins with the highest number of features on the far left of the chart, progressing in descending order.
+The interactive plotly chart allows us to see the actors with the highest movie features, with the list of movies available on hover over. I chose to only plot actors that had featured in five or more movies as anymore and the plot would be unreadable (and I was too lazy to created a user defined input range or value filter). The plot begins with the highest number of movie features on the far left of the chart, ranked descending order.
 
 <iframe width="950" height="580" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/12.embed"></iframe>
 
 So what did I deduce from this chart? Well, perhaps I'm not quite the film buff I first thought but:
 
-- to my suprise, the first actor I had heard of was in position five - Robert De Niro - who has appeared in eight of the top 250 films (and is undoubtably a household name).
+- to my suprise, the first actor I had heard of was in position five - **Robert De Niro** - who has appeared in eight of the top 250 movies (and is undoubtably a household name & living legend).
 
-- in position one, **John Ratzenberger** has 'appeared' in more of the Top 250 movies than any other 'actor' - a whopping 12 movies. Interetingly, **10 of these were animation films**, so he didn't even 'appear' in them at all.
+- in position one, **John Ratzenberger** has 'appeared' in more of the Top 250 movies than any other 'actor' - a whopping 12 x movies. Interetingly, **10 of these were animation films**, so he didn't even 'appear' in them at all.
 
 - **Bess Flowers**, in position two, featured in 10 movies all published before the 1970s.
 
-- in third position, **Joseph Oliveira**, was a peculiar find. Whilst he'd featured in 9 of the Top 250 movies, he'd only played **supporting** or **'uncredited'** roles in each. To list a few examples, Joseph featured as a [walk on officer in Dark Knight (2008)](https://www.imdb.com/title/tt0468569/fullcredits?ref_=tt_cl_sm#cast); held an uncredited role as ['Marciano' in Goodfellas (1990)](https://www.imdb.com/title/tt0099685/fullcredits?ref_=tt_cl_sm#cast); and **again** an [uncredited Officer Court Room Attendant in Wolf of Wall Street (2013)](https://www.imdb.com/title/tt0993846/fullcredits). He's been in so many great modern films but there's no chance I'd know who he was if he passed me on the street.
+- in third position, **Joseph Oliveira**, was a peculiar find. Whilst he'd featured in nine of the Top 250 movies, he'd only played **supporting** or **'uncredited'** roles in each. To list a few examples, Joseph featured as a [walk on officer in Dark Knight (2008)](https://www.imdb.com/title/tt0468569/fullcredits?ref_=tt_cl_sm#cast); held an uncredited role as ['Marciano' in Goodfellas (1990)](https://www.imdb.com/title/tt0099685/fullcredits?ref_=tt_cl_sm#cast); and **again** an [uncredited Officer Court Room Attendant in Wolf of Wall Street (2013)](https://www.imdb.com/title/tt0993846/fullcredits). He's been in so many modern classics but there's no chance I'd recognise him if he passed me on the street.
 
-- there are also plently of expected actors, including Harrison Ford (6th), Gino Corrado (7th), Morgan Freeman (10th) to name a few.
+- there are also plently of popularly recognised names, including Harrison Ford (6th), Gino Corrado (7th), Morgan Freeman (10th), to name a few.
+
+Why not take a look yourself!
 
 You can find the code for this visualisation on [Github](https://github.com/jiidata-science/Imdb_Top_Actors).
 
-  
 ## Summary & Final Thoughts
   
