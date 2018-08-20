@@ -78,7 +78,7 @@ We begun collecting data using *urlib3* and *beautifulSoup* libraries to scrape 
 The code block, below, was created to scrape the tabulated data and store it as lists in the ```table_data``` list object.
 
 ``` python
-table_data = [] # empty list object. We'll be storing scraped data in this
+ds_top250Movies = [] # empty list object. We'll be storing scraped data in this
 
 # IMDb page url for Top 250 rated movies
 url_imdbTop250 = 'https://www.imdb.com/chart/top'
@@ -104,22 +104,29 @@ for row in rows:
     movie_name = movie_name_string[movie_name_string.index('.')+1:movie_name_string.index('(')].strip()
     movie_rating = cols[2]
 
+    # retrieve the IMDb movieId (bespoke) for each movie
+    movieIdHTML = row.find("div", {"class":"wlb_ribbon"})
+    movieId = movieIdHTML.attrs['data-tconst']
+    
     # for each row, append selected attributes to the table_data object
-    table_data.append([movie_rank, movie_name, movie_year, movie_rating]) 
+    ds_top250Movies.append([movieId , movie_rank, movie_name, movie_year, movie_rating]) 
+    
+    # delete transient variables
+    del movieId , movie_rank, movie_name, movie_year, movie_rating
 ```
   
 Printing the first few values stored in *table_data* so you can see the output data.
 
-    table_data[:5] # print the top 5 results
+    ds_top250Movies[:5] # print the top 5 results
 
     #[Output:]
-    #Top250Rank | MovieName | Published | Rating
-    #---------- | --------- | --------- | ------
-    #1|'The Shawshank Redemption'|1994|9.2
-    #2|'The Godfather'|1972|9.2
-    #3|'The Godfather: Part II'|1974|9.0
-    #4|'The Dark Knight'|2008|9.0
-    #5|'12 Angry Men'|1957|8.9
+    #MovieId | Top250Rank | MovieName | Published | Rating
+    #---------- | ---------- | --------- | --------- | ------
+    #'tt0111161' | 1|'The Shawshank Redemption'|1994|9.2
+    #'tt0068646' | 2|'The Godfather'|1972|9.2
+    #'tt0071562' | 3|'The Godfather: Part II'|1974|9.0
+    #'tt0468569' | 4|'The Dark Knight'|2008|9.0
+    #'tt0050083' | 5|'12 Angry Men'|1957|8.9
 
 <a name="part3"></a>
 ## Part 3 (of 5): Data collection - Scraping Movie Genre & Full Cast + Crew
@@ -128,81 +135,87 @@ Having captured all of the top rated movie names, and some additional informatio
 
 > Before explaining this process any further, it's important to note that scraping web page data, using html tags, quite obviously relies on the website maintaining a consistent canonical html structure. It is likely that certain sites (most likely popular sites with non-static content) will look to optimise user-journeys and page layout over time. Even in the two week period I was looking at this topic, I had to modify my scraping code in accordance with updates to html tags on the requested web pages. Just be mindful of this, particularly if you're planning to routinely schedule your scraping process.
 
-On IMDb.com, each listed movie has its own landing page, covering a summary of movie information, and a separate page for viewing the corresponding full cast & crew. Providing that you use the IMDb 'film_id' (i.e. a bespoke ID that IMDb have created to uniquely store movie-level data) it's very simple to manipulate a couple of IMDb page URLs to retrieve the information we're after:
+On IMDb.com, each listed movie has its own landing page, covering a summary of movie information, and a separate page for viewing the corresponding full cast & crew. Providing that you use the IMDb 'movieID' (i.e. a bespoke ID that IMDb have created to uniquely store movie-level data) it's very simple to manipulate a couple of IMDb page URLs to retrieve the information we're after:
 
- - **https://www.imdb.com/title/{film_id}** *: used to retrieve film genre. Replace {film_id} with integer movie ID value* (example: **https://www.imdb.com/title/tt0111161** for Shawshank Redemption).
+ - **https://www.imdb.com/title/{movieID}** *: used to retrieve movie genre. Replace {movieID} with integer movieID value* (example: **https://www.imdb.com/title/tt0111161** for Shawshank Redemption).
 
- - **https://www.imdb.com/title/{film_id}/fullcredits** *: used to retrieve full cast & crew. Replace {film_id} with integer movie ID value* (example: **https://www.imdb.com/title/tt0111161/fullcredits** for Shawshank Redemption full cast & crew).
+ - **https://www.imdb.com/title/{movieID}/fullcredits** *: used to retrieve full cast & crew. Replace {movieID} with integer movieID value* (example: **https://www.imdb.com/title/tt0111161/fullcredits** for Shawshank Redemption full cast & crew).
 
-We actually already had the 'film_IDs' in the web page requested in <a href="#part2">Part 2</a>  - we just hadn't stored them yet. These ids could be found in the html table structure within the **class = 'wlb_ribbon'**. Once we'd captured all film_IDs, we iteratively constructed the movie-specific URLs and scraped the data we were after, illustrated in the code block, below.
+We actually already had the **movieIDs** in the output dataset we collected in <a href="#part2">Part 2</a>. These IDs were found in the html table structure within the **class = 'wlb_ribbon'**. With these movieIDs, we iteratively constructed movie-specific URLs and scraped the data we were after, illustrated in the code block, below.
 
 ``` python
 # Empty list objects. We'll be storing scraped data in this
-film_ids = []
-base_castAndCrew = []
+ds_movieGenre = [] # will store the movieID and movie genre(s)
+ds_castAndCrew = [] # will store the full cast & crew per movie
 
-# Soupified webpage from Step 2 (above). Retrieve all movie IDs
-links_class  = soup_Top250.findAll("div", {"class":"wlb_ribbon"}) # table/html tag containing each IMDb movie ID
+# movieIds for each of the 250 x movies (in ranked order by default)
+lst_movieIds = [movieId[0] for movieId in ds_top250Movies]
 
-# For each movie, using the film_ID:
-for idx, link in enumerate(links_class):    
+# for each movie, using the film ID:
+for idx, movieID in enumerate(lst_movieIds):    
     
     counter = idx + 1
     if counter % 25 == 0: # print to log every n iterations
-        print("[INFO] Scraping film no. {0} of {1}".format(counter,len(links_class)))
+        print("[INFO] Scraping movie no. {0} of {1}".format(counter,len(lst_movieIds)))
         
     # Part 1 ----------------------------------------
-    # FOR EACH MOVIE, USE MOVIE ID TO CONSTRUCT MOVIE PAGE URL AND RETURN FILM GENRE
+    # construct the movie title page and cast/crew page URLs (using the movieID)
     
-    filmID = link.attrs['data-tconst']
-    filmID_castURL = "https://www.imdb.com/title/{0}/fullcredits".format(filmID) # used to retrieve full cast
-    filmID_homePageURL = "https://www.imdb.com/title/{0}".format(filmID) # used to retrieve genre
-    
-    # request movie home page to return genre
-    html_filmHomePage = http.request('GET', filmID_homePageURL)
-    soup_filmHomePage = BeautifulSoup(html_filmHomePage.data, "lxml")
-    soup_getGenre = soup_filmHomePage.find('div', {'itemprop':'genre'})
-    genre_clean = str(soup_getGenre.text).replace('\n' , '').replace('Genres: ', '')
-    
-    # append derived data to output list
-    film_ids.append([filmID , filmID_castURL , filmID_homePageURL, genre_clean])
+    movieID_homePageURL = "https://www.imdb.com/title/{0}".format(movieID) # used to retrieve genre
+    movieID_castURL = "https://www.imdb.com/title/{0}/fullcredits".format(movieID) # used to retrieve full cast
     
     # Part 2 ----------------------------------------
-    # FOR EACH MOVIE, PULL FULL CAST FROM MOVIE CAST/CREW PAGE URL
+    # Retrieve the movie Genre from the movie title page
+    
+    # request movie home page to return genre
+    html_movieHomePage = http.request('GET', movieID_homePageURL)
+    soup_movieHomePage = BeautifulSoup(html_movieHomePage.data, "lxml")
+    soup_getGenre = soup_movieHomePage.findAll('div', {'class':'see-more inline canwrap'})
+    genre_clean = str(soup_getGenre[1].getText()).replace('\n' , '').replace('Genres: ', '')
+    
+    # append derived data to output list
+    ds_movieGenre.append([movieID , movieID_castURL , movieID_homePageURL, genre_clean])
+    
+    # Part 3 ----------------------------------------
+    # Retrieve the full cast & crew from the movie cast/crew page
     
     # query the website and return the html to the variable ‘page’
-    html_castAndCrew = http.request('GET', filmID_castURL)
+    html_castAndCrew = http.request('GET', movieID_castURL)
     soup_castAndCrew = BeautifulSoup(html_castAndCrew.data, "lxml")
     table_castAndCrew = soup_castAndCrew.find('table', {'class':'cast_list'})
     
     # select cast list
+    # here we are retrieving the second column (i.e. index 1) from each row within the table
     list_castAndCrew = []
-    for cast in table_castAndCrew.findAll('span', {'class':"itemprop"}):
-        list_castAndCrew.append(cast.text)
-    base_castAndCrew.append(list_castAndCrew)  
+    for cast in table_castAndCrew.findAll('tr'):
+        for idx, td in enumerate(cast.findAll('td')):
+            if idx == 1:
+                list_castAndCrew.append(td.getText())
+    ds_castAndCrew.append(list_castAndCrew)  
     
-    del filmID, filmID_castURL, filmID_homePageURL, genre_clean, html_filmHomePage, soup_filmHomePage, soup_getGenre, \
+    # delete transient variables
+    del movieID, movieID_castURL, movieID_homePageURL, genre_clean, html_movieHomePage, soup_movieHomePage, soup_getGenre, \
     list_castAndCrew, html_castAndCrew, soup_castAndCrew, table_castAndCrew
 ``` 
 
 I wrote a code statement, above, that printed to the log for each 25th iteration (just so we had an indication of progress).
 
-    #[INFO] Scraping film no. 25 of 250
-    #[INFO] Scraping film no. 50 of 250
-    #[INFO] Scraping film no. 75 of 250
-    #[INFO] Scraping film no. 100 of 250
-    #[INFO] Scraping film no. 125 of 250
-    #[INFO] Scraping film no. 150 of 250
-    #[INFO] Scraping film no. 175 of 250
-    #[INFO] Scraping film no. 200 of 250
-    #[INFO] Scraping film no. 225 of 250
-    #[INFO] Scraping film no. 250 of 250
+    #[INFO] Scraping movie no. 25 of 250
+    #[INFO] Scraping movie no. 50 of 250
+    #[INFO] Scraping movie no. 75 of 250
+    #[INFO] Scraping movie no. 100 of 250
+    #[INFO] Scraping movie no. 125 of 250
+    #[INFO] Scraping movie no. 150 of 250
+    #[INFO] Scraping movie no. 175 of 250
+    #[INFO] Scraping movie no. 200 of 250
+    #[INFO] Scraping movie no. 225 of 250
+    #[INFO] Scraping movie no. 250 of 250
 
 Having completed our data collection, we had the following local datasets:
 
-1. ```table_data```: contains the following attributes for each movie ([movie_rank, movie_name, movie_year, movie_rating])
-2. ```film_ids```: contains the following attributes for each movie ([filmID , filmID_castURL , filmID_homePageURL, genre_clean])
-2. ```base_castAndCrew```: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
+1. **```ds_top250Movies```**: contains the following attributes for each movie ([movieID, movie_rank, movie_name, movie_year, movie_rating])
+2. **```ds_movieGenre```**: contains the following attributes for each movie ([movieID , filmID_castURL , filmID_homePageURL, genre_clean])
+2. **```ds_castAndCrew```**: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
 
 Then we were able to start exploring!
 
