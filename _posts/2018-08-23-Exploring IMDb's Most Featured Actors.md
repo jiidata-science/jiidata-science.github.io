@@ -128,10 +128,6 @@ Having captured all of the top rated movie names, and some additional informatio
 
 > Before explaining this process any further, it's important to note that scraping web page data, using html tags, quite obviously relies on the website maintaining a consistent canonical html structure. It is likely that certain sites (most likely popular sites with non-static content) will look to optimise user-journeys and page layout over time. Even in the two week period I was looking at this topic, I had to modify my scraping code in accordance with updates to html tags on the requested web pages. Just be mindful of this, particularly if you're planning to routinely schedule your scraping process.
 
-
-
-
-
 On IMDb.com, each listed movie has its own landing page, covering a summary of movie information, and a separate page for viewing the corresponding full cast & crew. Providing that you use the IMDb 'film_id' (i.e. a bespoke ID that IMDb have created to uniquely store movie-level data) it's very simple to manipulate a couple of IMDb page URLs to retrieve the information we're after:
 
  - **https://www.imdb.com/title/{film_id}** *: used to retrieve film genre. Replace {film_id} with integer movie ID value* (example: **https://www.imdb.com/title/tt0111161** for Shawshank Redemption).
@@ -189,7 +185,7 @@ for idx, link in enumerate(links_class):
     list_castAndCrew, html_castAndCrew, soup_castAndCrew, table_castAndCrew
 ``` 
 
-We printed to the log for each 25th iteration (just so we have an indication of progress).
+I wrote a code statement, above, that printed to the log for each 25th iteration (just so we had an indication of progress).
 
     #[INFO] Scraping film no. 25 of 250
     #[INFO] Scraping film no. 50 of 250
@@ -202,12 +198,11 @@ We printed to the log for each 25th iteration (just so we have an indication of 
     #[INFO] Scraping film no. 225 of 250
     #[INFO] Scraping film no. 250 of 250
 
-
 Having completed our data collection, we had the following local datasets:
 
-1. **table_data** : contains the following attributes for each movie ([movie_rank, movie_name, movie_year, movie_rating])
-2. **film_ids**: contains the following attributes for each movie ([filmID , filmID_castURL , filmID_homePageURL, genre_clean])
-2. **base_castAndCrew**: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
+1. ```python table_data```: contains the following attributes for each movie ([movie_rank, movie_name, movie_year, movie_rating])
+2. ```film_ids```: contains the following attributes for each movie ([filmID , filmID_castURL , filmID_homePageURL, genre_clean])
+2. ```base_castAndCrew```: contains the full name for each full cast & crew member, for each movie (e.g. [['Robert DeNiro', 'Julia Roberts']])
 
 Now we were able to start exploring!
 
