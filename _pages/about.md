@@ -12,7 +12,7 @@ Sadly being a Data Scientist doesn't always make for easy introductory conversat
 
 > New person: "Enough about me. So, what do you do for a living?"
 
-> Me: "I'm actually a Data Scientist at *<insert current company name here>*"
+> Me: "I'm actually a Data Scientist at [insert current company name here]"
 
 > New person: "Ah (*sounds of interest*). So what is a Data Scientist and what sort of work do you do?"
 
