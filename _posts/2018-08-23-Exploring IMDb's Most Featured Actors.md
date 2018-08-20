@@ -38,6 +38,9 @@ So why did I chose to explore this random and niche topic? Well, primarily I wan
 
 <a name="part1"></a>
 ## Part 1 of 5: Importing Required Python Libraries
+
+This step is pretty trivial so little explanation is needed, in addition to the commented code-block below. It is perhaps useful to note, however, that in order to use Plotly, within a jupyter notebook, I had to use the ```plotly.offline``` configuration and specify ```init_notebook_mode(connected=True)``` .
+
 ``` python
 
 # libraries for requesting and scraping web pages
@@ -68,11 +71,11 @@ init_notebook_mode(connected=True)
 ## Part 2 (of 5): Data collection - Scraping IMDb's Top 250 Rated Movies
 *Data captured on 27th July 2018*
 
-We begun by using *urlib3* and *beautifulSoup* libraries to scrape the Top 250 movies from IMDb's [Top 250 movie charts](https://www.imdb.com/chart/top). We captured each movie title, along with it's official IMDb ranking and rating. All the data we required could be found within the html table with class = **'chart full-width'**, on the IMDb web page (highlighted in the printscreen below).
+We begun collecting data using *urlib3* and *beautifulSoup* libraries to scrape the Top 250 movies from IMDb's [Top 250 movie charts](https://www.imdb.com/chart/top). We captured each movie title, along with it's official IMDb ranking and rating. All the data we required could be found within the html table with **class = 'chart full-width'**, on the IMDb web page (highlighted in the printscreen below).
 
 ![alt text](https://raw.githubusercontent.com/jiidata-science/Imdb_Top_Actors/master/Images/TopRatedMovies.png "Top Rated Movies Table")
 
-The code block, below, was created to scrape the tabulated data and store it as lists in the table_data list object.
+The code block, below, was created to scrape the tabulated data and store it as lists in the ```table_data``` list object.
 
 ``` python
 table_data = [] # empty list object. We'll be storing scraped data in this
@@ -121,15 +124,21 @@ Printing the first few values stored in *table_data* so you can see the output d
 <a name="part3"></a>
 ## Part 3 (of 5): Data collection - Scraping Movie Genre & Full Cast + Crew
 
-Having captured all of the top rated movie names, and some additional information, I the focused on capturing the **genre** and **full cast and crew** for each movie. This data allowed us to explore actors that featured across multiple top rated movies.
+Having captured all of the top rated movie names, and some additional information, I then focused on capturing the **genre** and **full cast and crew**, for each movie. This data allowed us to explore actors that featured across multiple top rated movies.
+
+> Before explaining this process any further, it's important to note that scraping web page data, using html tags, quite obviously relies on the website maintaining a consistent canonical html structure. It is likely that certain sites (most likely popular sites with non-static content) will look to optimise user-journeys and page layout over time. Even in the two week period I was looking at this topic, I had to modify my scraping code in accordance with updates to html tags on the requested web pages. Just be mindful of this, particularly if you're planning to routinely schedule your scraping process.
+
+
+
+
 
 On IMDb.com, each listed movie has its own landing page, covering a summary of movie information, and a separate page for viewing the corresponding full cast & crew. Providing that you use the IMDb 'film_id' (i.e. a bespoke ID that IMDb have created to uniquely store movie-level data) it's very simple to manipulate a couple of IMDb page URLs to retrieve the information we're after:
 
- - https://www.imdb.com/title/{film_id} *: used to retrieve film genre. Replace {film_id} with integer movie ID value* (example: https://www.imdb.com/title/tt0111161 for Shawshank Redemption).
+ - **https://www.imdb.com/title/{film_id}** *: used to retrieve film genre. Replace {film_id} with integer movie ID value* (example: **https://www.imdb.com/title/tt0111161** for Shawshank Redemption).
 
- - https://www.imdb.com/title/{film_id}/fullcredits *: used to retrieve full cast & crew. Replace {film_id} with integer movie ID value* (example: https://www.imdb.com/title/tt0111161/fullcredits for Shawshank Redemption full cast & crew).
+ - **https://www.imdb.com/title/{film_id}/fullcredits** *: used to retrieve full cast & crew. Replace {film_id} with integer movie ID value* (example: **https://www.imdb.com/title/tt0111161/fullcredits** for Shawshank Redemption full cast & crew).
 
-We actually already had the 'film_IDs' in the web page requested in part 2 - we just hadn't stored them yet. These ids were found in the html table structure within the **'wlb_ribbon'** class. Once we'd captured all film_IDs, we iteratively constructed the movie-specific URLs and scraped the data we were after, illustrated in the code block, below.
+We actually already had the 'film_IDs' in the web page requested in <a href="#part2">Part 2</a>  - we just hadn't stored them yet. These ids could be found in the html table structure within the **class = 'wlb_ribbon'**. Once we'd captured all film_IDs, we iteratively constructed the movie-specific URLs and scraped the data we were after, illustrated in the code block, below.
 
 ``` python
 # Empty list objects. We'll be storing scraped data in this
