@@ -96,7 +96,6 @@ def getReedJobIDs( jobName , city ):
                 query_location.append(city)       
     return([job_ids, query_name, query_location])
 
-
 def getJobDescription( jobId ):
     base_url_request = 'https://www.reed.co.uk/api/1.0/jobs/{0}'.format(jobId)
     r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
@@ -119,7 +118,6 @@ for city in cities:
         add = getReedJobIDs( job , city ) # get job ids for each city
         jobsidsList.append( add )
 
-        
 # create a single pandas dataframe with all jobs and job descriptions
 DataScientist = pd.DataFrame( { 'JobID': jobsidsList[0][0], 'QueryTitle': jobsidsList[0][1], 'jobLocation': jobsidsList[0][2]})
 DataAnalyst   = pd.DataFrame( { 'JobID': jobsidsList[1][0], 'QueryTitle': jobsidsList[1][1], 'jobLocation': jobsidsList[1][2]})
@@ -135,17 +133,17 @@ After ensuring that the full corpus of job descriptions included an equal volume
 
 The object of this project was to identify the required skills most associated with each data profession and how these skills differ between roles. With this in mind, I needed to first construct a comprehensive list of skills that accounted for the three roles. For this I used combined two approaches:
 
-Creating a comprehensive list of skills based on my knowledge / internet searches
+* Creating a comprehensive list of skills based on my knowledge / internet searches
 
-I chose to approach identifying 'skills' within our text corpus by defining an exhaustive list (or as exhaustive as I had the patience for) that represented all skills (of interest) associated with our job roles.
+    I chose to approach identifying 'skills' within our text corpus by defining an exhaustive list (or as exhaustive as I had the patience for) that represented all skills (of interest) associated with our job roles.
 
-I created two pairs of lists; one pair that represent regex for hard skills and the other pair for soft skills. Within each pair, one list includes a set of regex used to find a specific skill within a text document (e.g. r'\balgorithm\w*' for algorithm or algorithms) and a second list that includes 'clean' names used to create a binary flag if a text document contains the corresponding regex (e.g. 'algorithm').
+    I created two pairs of lists; one pair that represent regex for hard skills and the other pair for soft skills. Within each pair, one list includes a set of regex used to find a specific skill within a text document (e.g. r'\balgorithm\w*' for algorithm or algorithms) and a second list that includes 'clean' names used to create a binary flag if a text document contains the corresponding regex (e.g. 'algorithm').
 
-Performing tf-IDF on the text corpus itself to identify (additional) skills
+* Performing tf-IDF on the text corpus itself to identify (additional) skills
 
-This step required using the text corpus itself. The purpose for this step was to capture any missed skills that hadn't been found as part of approach one. Any new terms or n-grams found with this approach were added to the original list of regular expressions developed in approach one.
+    This step required using the text corpus itself. The purpose for this step was to capture any missed skills that hadn't been found as part of approach one. Any new terms or n-grams found with this approach were added to the original list of regular expressions developed in approach one.
 
-For this step, I did not pre-process the text data (such as removing stopwords, stemming or lemmatising). If we looked at term frequency, only, then common words such as ('the', 'and', 'a', 'an', 'because') would likely dominate the most popular terms - these terms are popularly referred to as stopwords. tf-IDf, however, is reltaively robust to the prevalence of stopwords when assessing the presence of interesting terms within a text corpus, by effectively downweighting the term frequency by the prevalence of the term across all text documents.
+    For this step, I did not pre-process the text data (such as removing stopwords, stemming or lemmatising). If we looked at term frequency, only, then common words such as ('the', 'and', 'a', 'an', 'because') would likely dominate the most popular terms - these terms are popularly referred to as stopwords. tf-IDf, however, is reltaively robust to the prevalence of stopwords when assessing the presence of interesting terms within a text corpus, by effectively downweighting the term frequency by the prevalence of the term across all text documents.
 
 At this point I started cleaning our text corpus, ready for analysis. As our job descriptions were free text, we needed to extract useful information. When processing a corpus of text one typically begins by 'cleaning' the data, which may include removing stopwords (reference) , removing special characters (reference) aswell as stemming and/or lemmitising (reference) - for more details, analyticsvidhya.com have a ['Comprehensive Guide to text processing'](https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/)
 
@@ -167,13 +165,10 @@ leakage_regex = [  r'\s?lead\s+data\s+engineer\w?' # (lead data engineer(s))
                  , r'\s?senior\s+data\s+engineer\w?' # (senior data engineer(s)) 
                  , r'\s?data engineer\w?' # (data engineer | data engineers)
                  , r'\sengineer\w?' # (engineer(s))             
-                 
-
                  , r'\s?lead\s+data\s+scient\w+' # (lead data scientist(s)) 
                  , r'\s?senior\s+data\s+scient\w+' # (senior data scientist(s))
                  , r'\s?data scient\w+'  # (data scientist(s))
                  , r'\bscientist\w?' # (scientist(s))
-                
                  , r'\s?lead\s+data\s+analyst\w?' # (lead data engineer(s)) 
                  , r'\s?senior\s+data\s+analyst\w?' # (senior data analyst(s)) 
                  , r'\s?data analyst\w?' # (data analyst(s))
@@ -202,8 +197,9 @@ text_noJobTitles = list( [removeJobTitles(string , leakage_regex) for string in 
 
 ``` python
 text_removeStopPunc = []
-for descrip in text_noJobTitles:
-    allstopwords = stopwords.words('english')+list(punctuation)
+allstopwords = stopwords.words('english')+list(punctuation)
+
+for descrip in text_noJobTitles:    
     descrip = [word.lower() for word in descrip.split() if word.lower() not in allstopwords]
     descrip = ' '.join(descrip)
     text_removeStopPunc.append(descrip)
@@ -255,29 +251,23 @@ regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel
 ### Matching regex
 
 ``` python
+hardMatches = [] # empty list object that will contain matched skills per document
 
-    hardMatches = [] # empty list object that will contain matched skills per document
-
-    # for each text document search for each skill (based on regex list)
-    for idx, doc in enumerate(text_removeStopPunc):
+# for each text document search for each skill (based on regex list)
+for idx, doc in enumerate(text_removeStopPunc):
+    list_matchedSkills = []
+    for regvalue , regname in zip(regx_hardSkills_list , regx_hardfeatName_list):
+        regexSearch = re.findall(regvalue , doc , re.I) # check if skills (regex) matched document
+        # if atleast one match add regname to list
+        if len(regexSearch) > 0:
+            list_matchedSkills.append(regname)
+    hardMatches.append(list_matchedSkills)
         
-        list_matchedSkills = []
-        
-        for regvalue , regname in zip(regx_hardSkills_list , regx_hardfeatName_list):
-            
-            regexSearch = re.findall(regvalue , doc , re.I) # check if skills (regex) matched document
-            
-            # if atleast one match add regname to list
-            if len(regexSearch) > 0:
-                list_matchedSkills.append(regname)
-                        
-        hardMatches.append(list_matchedSkills)
-        
-    print('Done')
-    list(hardMatches[:3])
+print('Done')
+list(hardMatches[:3])
 ```
 
-    #output:
+    #0utput:
     #[
     # ['Phd', 'MachineLearning', 'R'],
     # ['Algorithms','SQL','Spark','MachineLearning','Matlab','Python','Statistics','Testing','R','MapReduce','Hive','BigData'],
@@ -285,28 +275,23 @@ regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel
     # ]
 
 ``` python
-    # turning matched skills into a binary (sparse) matrix
-    # ========== STEP 01 : create empty matrix / array
+# ========== STEP 01 : create empty matrix / array
+n = len(text_removeStopPunc)    # num. of docs
+m = len(regx_hardfeatName_list) # by total num. of skills
+skillsMatrix = [0] * n
+for i in range(n):
+    skillsMatrix[i] = [0] * m
 
-    n = len(text_removeStopPunc)    # num. of docs
-    m = len(regx_hardfeatName_list) # by total num. of skills
-    skillsMatrix = [0] * n
-    for i in range(n):
-        skillsMatrix[i] = [0] * m
+# ========== STEP 02 : flag skillsets in each doc (using matrix)
+for idx, eachSkillSet in enumerate(hardMatches):
+    for eachSkill in eachSkillSet:
+        indices = regx_hardfeatName_list.index(eachSkill)
+        skillsMatrix[idx][indices] = 1
 
-    # flag skillsets in matrix
-    # ========== STEP 02 : flag skillsets in each doc (using matrix)
-
-    for idx, eachSkillSet in enumerate(hardMatches):
-        for eachSkill in eachSkillSet:
-            indices = regx_hardfeatName_list.index(eachSkill)
-            skillsMatrix[idx][indices] = 1
-
-    # ========== STEP 03 : convert matrix / visualise as pandas dataframe
-    df_matchedSkills = pd.DataFrame(skillsMatrix, columns=full_skills)
-    df_matchedSkills['Label'] = list(df_jobsClean_balanced.QueryTitle) # append the role title to the dataset
-    df_matchedSkills[:5]
-
+# ========== STEP 03 : convert matrix / visualise as pandas dataframe
+df_matchedSkills = pd.DataFrame(skillsMatrix, columns=full_skills)
+df_matchedSkills['Label'] = list(df_jobsClean_balanced.QueryTitle) # append the role title to the dataset
+df_matchedSkills[:5]
 ```
 
 | index | Algorithms | AppEngine |  NoSQL | SQL | Excel | Spark | ... | Label |
