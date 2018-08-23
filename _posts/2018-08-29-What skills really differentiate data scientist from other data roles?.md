@@ -157,9 +157,9 @@ Before we began extracting skills from the job descriptions, I first removed the
 
 > "The business requires <mark>creative engineering</mark> balanced with high quality and customer focus"
 
-> "You will enter the team at an early stage, deploying and monitoring their unique system and providing engineering support to customers."
+> "You will enter the team at an early stage, deploying and monitoring their unique system and providing <mark>engineering support</mark> to customers."
 
-> "Provide direct support to users about their deployment and data engineering needs"
+> "Provide direct support to users about their deployment and <mark>data engineering needs</mark>"
 
 Nevertheless, the terms "engineer" and "engineering" will also be used to refer to the relevant job title, such as <mark>Data Engineer</mark> or <mark>Lead Engineer</mark>. Remember, the whole purpose here is to extract skills that corresponding with specific role titles and therefore we removed such references from the text to avoid over-representing related skills.
 
@@ -299,6 +299,20 @@ regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel
     df_matchedSkills[:5]
 
 ```
+
+
+
+| index         | Algorithms           | AppEngine |  NoSQL | SQL | Excel | Spark | ... | Label |
+| ------------- |:-------------:| -----:|-----:|-----:|-----:|-----:|-----:|-----:|
+| 0             | 0      | 0 | 0 | 0 | 0  |   0  | ... |  Data Scientist |
+| 1             | 1      | 0 | 0 | 1 | 0  |   1  | ... |  Data Scientist  |
+| 2             | 0      | 0 | 0 | 1 | 0  |   0  | ... |  Data Scientist  |
+| 3             | 0      | 0 | 0 | 1 | 1 |    0 | ... |  Data Scientist  |
+| 4             | 0      | 0 | 0 | 0 | 0 |   1  | ... |  Data Scientist  |
+| 5             | 1      | 0 | 0 | 1 | 0 |   0  | ... |  Data Scientist  |
+
+
+
 
 ## Part 5 (of 5): 
 
