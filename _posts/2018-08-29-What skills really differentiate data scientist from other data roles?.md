@@ -206,6 +206,8 @@ for descrip in text_noJobTitles:
     del descrip
 ```
 
+### Creating a list of skills using regex
+
 - Create a list of skills that should cover the three data professions
 - Explore the text corpus itself using tfIDf to identify other skills that were left out of the skill set
 - the skills were represented as regex terms given slight variations
@@ -245,7 +247,7 @@ regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel
             , 'DeepLearning' , 'DataModelling' , 'DataQuality' , 'ComputeVision']
 ```
 
-### Matching regex
+### Creating a sparse matrix of skills in each document
 
 ``` python
 hardMatches = [] # empty list object that will contain matched skills per document
