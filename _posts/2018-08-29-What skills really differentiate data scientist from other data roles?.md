@@ -83,34 +83,34 @@ getJobDescription : this function allows the user to request the job description
 
 Importantly, the API had a response limit of 100 jobs per request. I had to request a token, which was passed as metadata in the GET request - unique to me
 
-``` shell
-def getReedJobIDs( jobName , city ):
-    base_url_request = 'https://www.reed.co.uk/api/1.0/search?keywords={0}&locationName={1}&graduate=false'.format(jobName , city)
-    r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
-    convert_json = json.loads(r.text)
-    job_ids = []
-    query_name = []
-    query_location = []
-    for each_result in convert_json['results']:
-        for key, value in each_result.items():
-            if key == 'jobId':
-                job_ids.append(value) 
-                query_name.append(jobName)
-                query_location.append(city)       
-    return([job_ids, query_name, query_location])
+``` python
+    def getReedJobIDs( jobName , city ):
+        base_url_request = 'https://www.reed.co.uk/api/1.0/search?keywords={0}&locationName={1}&graduate=false'.format(jobName , city)
+        r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
+        convert_json = json.loads(r.text)
+        job_ids = []
+        query_name = []
+        query_location = []
+        for each_result in convert_json['results']:
+            for key, value in each_result.items():
+                if key == 'jobId':
+                    job_ids.append(value) 
+                    query_name.append(jobName)
+                    query_location.append(city)       
+        return([job_ids, query_name, query_location])
 
 
-def getJobDescription( jobId ):
-    base_url_request = 'https://www.reed.co.uk/api/1.0/jobs/{0}'.format(jobId)
-    r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
-    convert_json = json.loads(r.text)
-    desc_raw = convert_json['jobDescription']
-    cleanr = re.compile('<.*?>')
-    desc_clean = re.sub(cleanr, '', desc_raw)
-    return( [ jobId , desc_clean ] )
+    def getJobDescription( jobId ):
+        base_url_request = 'https://www.reed.co.uk/api/1.0/jobs/{0}'.format(jobId)
+        r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
+        convert_json = json.loads(r.text)
+        desc_raw = convert_json['jobDescription']
+        cleanr = re.compile('<.*?>')
+        desc_clean = re.sub(cleanr, '', desc_raw)
+        return( [ jobId , desc_clean ] )
 ```
 
-``` shell
+``` python
     # we loop through two cities and three data job titles to return corresponding job descriptions
     cities = ['london', 'manchester', 'glasgow', 'birmingham', 'liverpool', 'leeds', 'Bristol']
     jobNames = ['data+scientist', 'data+analyst', 'data+engineer']
@@ -155,50 +155,150 @@ Now we have a balanaced dataset, with 96 job descriptions for each data role.
 
 Before we began extracting skills from the job descriptions, I first removed the role titles from the text - the purpose of this step was to remove words that could result in target leakage. For example, for data engineers it is likely that the term "engineer" or "engineering" will appear in corresponding job descriptions as a required skill (some examples below taken from the text corpus).
 
-> "The business requires creative engineering balanced with high quality and customer focus"
+> "The business requires <mark>creative engineering</mark> balanced with high quality and customer focus"
+
 > "You will enter the team at an early stage, deploying and monitoring their unique system and providing engineering support to customers."
+
 > "Provide direct support to users about their deployment and data engineering needs"
 
 Nevertheless, the terms "engineer" and "engineering" will also be used to refer to the relevant job title, such as <mark>Data Engineer</mark> or <mark>Lead Engineer</mark>. Remember, the whole purpose here is to extract skills that corresponding with specific role titles and therefore we removed such references from the text to avoid over-representing related skills.
 
-``` shell
-# specificy regex terms for each job title (+ variance of)
+``` python
+    # specificy regex terms for each job title (+ variance of)
 
-leakage_regex = [  r'\s?lead\s+data\s+engineer\w?' # (lead data engineer(s))  
-                 , r'\s?senior\s+data\s+engineer\w?' # (senior data engineer(s)) 
-                 , r'\s?data engineer\w?' # (data engineer | data engineers)
-                 , r'\sengineer\w?' # (engineer(s))             
-                 
+    leakage_regex = [  r'\s?lead\s+data\s+engineer\w?' # (lead data engineer(s))  
+                     , r'\s?senior\s+data\s+engineer\w?' # (senior data engineer(s)) 
+                     , r'\s?data engineer\w?' # (data engineer | data engineers)
+                     , r'\sengineer\w?' # (engineer(s))             
+                     
 
-                 , r'\s?lead\s+data\s+scient\w+' # (lead data scientist(s)) 
-                 , r'\s?senior\s+data\s+scient\w+' # (senior data scientist(s))
-                 , r'\s?data scient\w+'  # (data scientist(s))
-                 , r'\bscientist\w?' # (scientist(s))
-                
-                 , r'\s?lead\s+data\s+analyst\w?' # (lead data engineer(s)) 
-                 , r'\s?senior\s+data\s+analyst\w?' # (senior data analyst(s)) 
-                 , r'\s?data analyst\w?' # (data analyst(s))
-                 , r'\banalyst\w?'
-                   ]
+                     , r'\s?lead\s+data\s+scient\w+' # (lead data scientist(s)) 
+                     , r'\s?senior\s+data\s+scient\w+' # (senior data scientist(s))
+                     , r'\s?data scient\w+'  # (data scientist(s))
+                     , r'\bscientist\w?' # (scientist(s))
+                    
+                     , r'\s?lead\s+data\s+analyst\w?' # (lead data engineer(s)) 
+                     , r'\s?senior\s+data\s+analyst\w?' # (senior data analyst(s)) 
+                     , r'\s?data analyst\w?' # (data analyst(s))
+                     , r'\banalyst\w?'
+                       ]
 
-# function that will take a input text string and remove regex expressions
+    # function that will take a input text string and remove regex expressions
 
-def removeJobTitles(txt_string, regex_list):
-    try:
-        outtxt = txt_string # initiate output as the input string
-        for idx, regx in enumerate(regex_list):
-            p = re.compile(regx, re.I)
-            outtxt = p.sub("", outtxt)    
-    except Exception as e:
-        print(e.args)
-    else:
-        return outtxt
+    def removeJobTitles(txt_string, regex_list):
+        try:
+            outtxt = txt_string # initiate output as the input string
+            for idx, regx in enumerate(regex_list):
+                p = re.compile(regx, re.I)
+                outtxt = p.sub("", outtxt)    
+        except Exception as e:
+            print(e.args)
+        else:
+            return outtxt
 
-# call function
-text_noJobTitles = list( [removeJobTitles(string , leakage_regex) for string in list(df_jobsClean_balanced.jobdescription)])
+    # call function
+    text_noJobTitles = list( [removeJobTitles(string , leakage_regex) for string in list(df_jobsClean_balanced.jobdescription)])
 ```
 
-## Part 4 (of 5): 
+## Part 4 (of 5): Extracting skills
+
+After this I started to we clean the text and then extract the skills that are associated with these data roles
+
+``` python
+    text_removeStopPunc = []
+    for descrip in text_noJobTitles:
+        allstopwords = stopwords.words('english')+list(punctuation)
+        descrip = [word.lower() for word in descrip.split() if word.lower() not in allstopwords]
+        descrip = ' '.join(descrip)
+        text_removeStopPunc.append(descrip)
+        del descrip
+```
+
+```
+
+regx_hardSkills_list = [r'algorithm\w*' , r'\bapp\seng\w*\b' , r'\w*nosql' , r'\bsql\b', r'\bexcel\b'
+            , r'spark' , r'phd', r'\bmetric\w?\b', r'\w*aws\w*\b' , r'java' , r'predict\w+\b'
+            , r'\bpipeline\w+\b', r'\bmining\b', r'\bjavascript\b', r'js\b',  r'decision\s*tree\w+\b'
+            , r'\becl\b' , r'hadoop' , r'hbase\w*\b', r'\balgebra\w*\b', r'machine\s*l\w+\b'
+            , r'\w*math\w*\b' , r'\w*matlab\w*\b' ,r'\bcalculus\b', r'\bperl\b'
+            , r'\w*powerpoint\w*\b', r'\w*visualis\w*\b' , r'\bprogramming\b', r'\w*python\w*\b' , r'scikit\w*', r'\w*pandas\w*\b'
+            , r'dply\w*\b' , r'\w*report\w*\b' , r'\bsas\w*\b', r'\bscripting\b' , r'statistic\w*\b'
+            , r'kpi\w?\b' , r'tableau' , r'\badwords\w?\b' , r'\btest\w*\b' , r'\bhypothes\w+\b'
+            , r'\bhtml\b' , r'\w*pivot\w?\b' , r'\bdesign\w*\b' , r'\bcampaign\w*\b' , r'\w*google\s?analytics\w*\b'
+            , r'\w*agile\w*\b' , r'\w*scrum\w*\b' , r'\bcloudera\b' , r'\w*cloud\b' , r'json\w*' , r'\bapi\w?\b'
+            , r'\bsecurity\b' , r'\br\b' , r'dashboard' , r'qlikview' , r'spss'
+            , r'\bbi\b|\bbusiness\s?int\w*\b' , r'\bruby|\sruby' , r'\w*scala\b' , r'php' , r'vba|visual\s?bas\w*'
+            , r'mongo' , r'cassandra' , r'\w*map\s?reduce\w*' , r'pig'
+            , r'\w*hive\w*' , r'adobe' , r'nlp' , r'big\s?data' , r'msc', r'\bc\b|c\#' , r'\w*anomalie\w*\b'
+                
+            , r'redshift' , r'integrat\w*', r'segment\w*' , r'gcp' , r'azure', r'data\s?management'
+            , r'\w*deep\s?learning' , r'data\s+modelling' , r'data\s?quality' , r'computer\s?vision'  ]
+
+regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel' , 'Spark' , 'Phd' , 'Metrics' , 'AWS' 
+                          , 'Java' , 'Predictions', 'Pipelines' , 'DataMining', 'Javascript' , 'Javascript' , 'Decision Trees'
+                          , 'ECL' , 'Hadoop', 'HBase', 'Algebra', 'MachineLearning'
+                          , 'Mathematics', 'Matlab', 'Calculus' , 'Perl'
+                          , 'Powerpoint', 'Visualisation', 'Programming', 'Python', 'ScikitLearn', 'Pandas'
+                          , 'dplyR', 'ReportWriting', 'SAS', 'Scripting', 'Statistics'
+                          , 'KPIs' , 'Tableau' , 'AdWords', 'Testing', 'HypothesisTesting'
+                          , 'HTML', 'PivotTables', 'Design', 'Campaigns', 'GoogleAnalytics'
+                          , 'Agile', 'Scrum', 'Cloudera', 'Cloud', 'JSON', 'APIs'
+                          , 'Security' , 'R', 'Dashboards', 'Qlikview', 'SPSS'
+                          , 'BI', 'Ruby' , 'Scala', 'php', 'VBA'
+                          , 'Mongo', 'Cassandra', 'MapReduce', 'Pig'
+                          , 'Hive', 'Adobe' , 'NLP', 'BigData', 'MSc', 'C' , 'AnomalyDetection'
+                          , 'RedShift', 'Integration', 'Segmentation', 'GCP', 'Azure', 'DataManagement'
+                          , 'DeepLearning' , 'DataModelling' , 'DataQuality' , 'ComputeVision']
+
+```
+
+### Matching regex
+
+```
+
+    hardMatches = [] # empty list object that will contain matched skills per document
+
+    # for each text document search for each skill (based on regex list)
+    for idx, doc in enumerate(text_removeStopPunc):
+        
+        list_matchedSkills = []
+        
+        for regvalue , regname in zip(regx_hardSkills_list , regx_hardfeatName_list):
+            
+            regexSearch = re.findall(regvalue , doc , re.I) # check if skills (regex) matched document
+            
+            # if atleast one match add regname to list
+            if len(regexSearch) > 0:
+                list_matchedSkills.append(regname)
+                        
+        hardMatches.append(list_matchedSkills)
+        
+    print('Done')
+    list(hardMatches[:3])
+
+    # turning matched skills into a binary (sparse) matrix
+    # ========== STEP 01 : create empty matrix / array
+
+    n = len(text_removeStopPunc)    # num. of docs
+    m = len(regx_hardfeatName_list) # by total num. of skills
+    skillsMatrix = [0] * n
+    for i in range(n):
+        skillsMatrix[i] = [0] * m
+
+    # flag skillsets in matrix
+    # ========== STEP 02 : flag skillsets in each doc (using matrix)
+
+    for idx, eachSkillSet in enumerate(hardMatches):
+        for eachSkill in eachSkillSet:
+            indices = regx_hardfeatName_list.index(eachSkill)
+            skillsMatrix[idx][indices] = 1
+
+    # ========== STEP 03 : convert matrix / visualise as pandas dataframe
+    df_matchedSkills = pd.DataFrame(skillsMatrix, columns=full_skills)
+    df_matchedSkills['Label'] = list(df_jobsClean_balanced.QueryTitle) # append the role title to the dataset
+    df_matchedSkills[:5]
+
+```
 
 ## Part 5 (of 5): 
 
