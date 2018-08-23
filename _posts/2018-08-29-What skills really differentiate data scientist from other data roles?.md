@@ -6,7 +6,7 @@ header:
   overlay_color: "#000"
   overlay_filter: "0.6"
   overlay_image: https://raw.githubusercontent.com/jiidata-science/jiidata-science.github.io/master/assets/images/posts/datascientists/DataScientists_title.png
-excerpt: "Analysis of the Data Science skills that the employment market is after, using the Reed.co.uk API, with Pandas, Plotly & Scikit-Learn"
+excerpt: "Analysis of sought data science skills, using the Reed.co.uk API, with Pandas, Plotly & Scikit-Learn"
 author_profile: true
 author: Jez Irving
 classes: wide
