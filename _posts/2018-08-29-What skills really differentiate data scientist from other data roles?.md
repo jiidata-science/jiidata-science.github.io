@@ -299,8 +299,20 @@ df_matchedSkills[:5]
 | 3 | 0 | 0 | 0 | 1 | 1 | 0 | ... | Data Scientist |
 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | ... | Data Scientist |
 
-
 ## Part 5 (of 5): 
+
+This chart shows the proportion of job descriptions that contain a particular skill, for each of the data roles (note: the blue bar represents data scientists as they were the main focus of my analysis. The purple scatter/dots represent data engineers and the green, data analysts). I've ordered the chart by prevalence of each skill across data science job descriptions.
+
+Interestingly, the skills that appear in more than 50% of all data science roles are:
+- Python *( **Scientist : 99%** , Engineer : 78% , Analyst : 25% )*
+- Machine Learning *( **Scientist : 89%** , Engineer : 31% , Analyst : 8% )*
+- R *( **Scientist : 71%** , Engineer : 11% , Analyst : 13% )*
+- SQL *( **Scientist : 63%** , Engineer : 54% , Analyst : 52% )*, and 
+- Statistics *( **Scientist : 53%** , Engineer : 7% , Analyst : 24% )*
+
+Additionally, a higher proportion of data science jobs require these five skills than other data roles. It's quite clear that a budding data scientist should focus on upskilling in each of these areas. Whilst each person has their own coding language preference, I think it's useful for a data scientist to have a working appreciation for both R and Python as they may each be (slighltly) better suited to different tasks.
+
+The above chart also illustrates the skills that are far more required for engineering (e.g. Spark and Hadoop) and analyst (e.g. Report Writing and BI) roles, than for data science. **Feel free to explore the chart yourself, but I think we can better visualise the skills that are more specific to data scientists and perhaps which are common across all three.**
 
 ## Outcomes
 
