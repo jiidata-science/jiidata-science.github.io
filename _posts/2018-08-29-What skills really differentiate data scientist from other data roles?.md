@@ -5,7 +5,7 @@ date: 2018-08-23T11:48:41-04:00
 header:
   overlay_color: "#000"
   overlay_filter: "0.6"
-  overlay_image: https://raw.githubusercontent.com/jiidata-science/jiidata-science.github.io/master/assets/images/posts/imdb/DataScientists_title.png
+  overlay_image: https://raw.githubusercontent.com/jiidata-science/jiidata-science.github.io/master/assets/images/posts/datascientists/DataScientists_title.png
 excerpt: "Analysis of the Data Science skills that the employment market is after, using the Reed.co.uk API, with Pandas, Plotly & Scikit-Learn"
 author_profile: true
 author: Jez Irving
@@ -31,11 +31,11 @@ Over the last eight years I've been in data roles across a number of industries 
 
 ### What we'll be looking at
 
-    * Part 1 (of 5): Required Python Libraries
-    * Part 2 (of 5): Data collection - Using Reed.co.uk's **[JobSeeker API](https://www.reed.co.uk/developers/Jobseeker)** to retrieve job descriptions (with requests and pandas)
-    * Part 3 (of 5): Data Pre-Processing : Extracting Skills from Text Corpus
-    * Part 4 (of 5): Data Exploration - Popular Data Scientist skills & how they differ from other data professions (with regex and Plotly)
-    * Part 5 (of 5): Classifying a role based on required skills (quick classification model with [ScikitLearn](http://scikit-learn.org/stable/))
+* Part 1 (of 5): Required Python Libraries
+* Part 2 (of 5): Data collection - Using Reed.co.uk's **[JobSeeker API](https://www.reed.co.uk/developers/Jobseeker)** to retrieve job descriptions (with requests and pandas)
+* Part 3 (of 5): Data Pre-Processing : Extracting Skills from Text Corpus
+* Part 4 (of 5): Data Exploration - Popular Data Scientist skills & how they differ from other data professions (with regex and Plotly)
+* Part 5 (of 5): Classifying a role based on required skills (quick classification model with [ScikitLearn](http://scikit-learn.org/stable/))
 
 ## Part 1 (of 5) : Required Python Libraries
 
