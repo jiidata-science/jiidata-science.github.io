@@ -41,7 +41,6 @@ Over the last eight years I've been in data roles across a number of industries 
 
 
 ``` python
-
 # libraries for querying API
 import requests
 import json
@@ -55,7 +54,6 @@ import numpy as np
 import re
 from string import punctuation
 
-
 # libraries (and configuration) for visualisation with Plotly
 import matplotlib.pyplot as plt
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
@@ -68,7 +66,6 @@ init_notebook_mode(connected=True)
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-
 ```
 
 ## Part 2 (of 5): Data collection - Using Reed.co.uk's **[JobSeeker API](https://www.reed.co.uk/developers/Jobseeker)** to retrieve job descriptions
@@ -84,51 +81,52 @@ getJobDescription : this function allows the user to request the job description
 Importantly, the API had a response limit of 100 jobs per request. I had to request a token, which was passed as metadata in the GET request - unique to me
 
 ``` python
-    def getReedJobIDs( jobName , city ):
-        base_url_request = 'https://www.reed.co.uk/api/1.0/search?keywords={0}&locationName={1}&graduate=false'.format(jobName , city)
-        r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
-        convert_json = json.loads(r.text)
-        job_ids = []
-        query_name = []
-        query_location = []
-        for each_result in convert_json['results']:
-            for key, value in each_result.items():
-                if key == 'jobId':
-                    job_ids.append(value) 
-                    query_name.append(jobName)
-                    query_location.append(city)       
-        return([job_ids, query_name, query_location])
+def getReedJobIDs( jobName , city ):
+    base_url_request = 'https://www.reed.co.uk/api/1.0/search?keywords={0}&locationName={1}&graduate=false'.format(jobName , city)
+    r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
+    convert_json = json.loads(r.text)
+    job_ids = []
+    query_name = []
+    query_location = []
+    for each_result in convert_json['results']:
+        for key, value in each_result.items():
+            if key == 'jobId':
+                job_ids.append(value) 
+                query_name.append(jobName)
+                query_location.append(city)       
+    return([job_ids, query_name, query_location])
 
 
-    def getJobDescription( jobId ):
-        base_url_request = 'https://www.reed.co.uk/api/1.0/jobs/{0}'.format(jobId)
-        r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
-        convert_json = json.loads(r.text)
-        desc_raw = convert_json['jobDescription']
-        cleanr = re.compile('<.*?>')
-        desc_clean = re.sub(cleanr, '', desc_raw)
-        return( [ jobId , desc_clean ] )
+def getJobDescription( jobId ):
+    base_url_request = 'https://www.reed.co.uk/api/1.0/jobs/{0}'.format(jobId)
+    r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
+    convert_json = json.loads(r.text)
+    desc_raw = convert_json['jobDescription']
+    cleanr = re.compile('<.*?>')
+    desc_clean = re.sub(cleanr, '', desc_raw)
+    return( [ jobId , desc_clean ] )
 ```
 
 ``` python
-    # we loop through two cities and three data job titles to return corresponding job descriptions
-    cities = ['london', 'manchester', 'glasgow', 'birmingham', 'liverpool', 'leeds', 'Bristol']
-    jobNames = ['data+scientist', 'data+analyst', 'data+engineer']
+# we loop through two cities and three data job titles to return corresponding job descriptions
+cities = ['london', 'manchester', 'glasgow', 'birmingham', 'liverpool', 'leeds', 'Bristol']
+jobNames = ['data+scientist', 'data+analyst', 'data+engineer']
 
-    # get job ids based on query terms (in API)
-    jobsidsList = []
-    for city in cities:
-        for job in jobNames:
-            add = getReedJobIDs( job , city ) # get job ids for each city
-            jobsidsList.append( add )
+# get job ids based on query terms (in API)
+jobsidsList = []
+for city in cities:
+    for job in jobNames:
+        add = getReedJobIDs( job , city ) # get job ids for each city
+        jobsidsList.append( add )
 
-            
-    # create a single pandas dataframe with all jobs and job descriptions
-    DataScientist = pd.DataFrame( { 'JobID': jobsidsList[0][0], 'QueryTitle': jobsidsList[0][1], 'jobLocation': jobsidsList[0][2]})
-    DataAnalyst   = pd.DataFrame( { 'JobID': jobsidsList[1][0], 'QueryTitle': jobsidsList[1][1], 'jobLocation': jobsidsList[1][2]})
-    DataEngineer  = pd.DataFrame( { 'JobID': jobsidsList[2][0], 'QueryTitle': jobsidsList[2][1], 'jobLocation': jobsidsList[2][2]})
-    AllJobIDs     = pd.concat( [DataAnalyst, DataEngineer, DataScientist], axis = 0 )
+        
+# create a single pandas dataframe with all jobs and job descriptions
+DataScientist = pd.DataFrame( { 'JobID': jobsidsList[0][0], 'QueryTitle': jobsidsList[0][1], 'jobLocation': jobsidsList[0][2]})
+DataAnalyst   = pd.DataFrame( { 'JobID': jobsidsList[1][0], 'QueryTitle': jobsidsList[1][1], 'jobLocation': jobsidsList[1][2]})
+DataEngineer  = pd.DataFrame( { 'JobID': jobsidsList[2][0], 'QueryTitle': jobsidsList[2][1], 'jobLocation': jobsidsList[2][2]})
+AllJobIDs     = pd.concat( [DataAnalyst, DataEngineer, DataScientist], axis = 0 )
 ```
+
 ## Part 3 (of 5): Data Pre-Processing - Extracting Skills from Text Corpus
 
 So far we've reviewed the data collection process. We have approximately 100 job descriptions for each data role, with a total of ~300.
@@ -164,55 +162,57 @@ Before we began extracting skills from the job descriptions, I first removed the
 Nevertheless, the terms "engineer" and "engineering" will also be used to refer to the relevant job title, such as <mark>Data Engineer</mark> or <mark>Lead Engineer</mark>. Remember, the whole purpose here is to extract skills that corresponding with specific role titles and therefore we removed such references from the text to avoid over-representing related skills.
 
 ``` python
-    # specificy regex terms for each job title (+ variance of)
+# specificy regex terms for each job title (+ variance of)
+leakage_regex = [  r'\s?lead\s+data\s+engineer\w?' # (lead data engineer(s))  
+                 , r'\s?senior\s+data\s+engineer\w?' # (senior data engineer(s)) 
+                 , r'\s?data engineer\w?' # (data engineer | data engineers)
+                 , r'\sengineer\w?' # (engineer(s))             
+                 
 
-    leakage_regex = [  r'\s?lead\s+data\s+engineer\w?' # (lead data engineer(s))  
-                     , r'\s?senior\s+data\s+engineer\w?' # (senior data engineer(s)) 
-                     , r'\s?data engineer\w?' # (data engineer | data engineers)
-                     , r'\sengineer\w?' # (engineer(s))             
-                     
+                 , r'\s?lead\s+data\s+scient\w+' # (lead data scientist(s)) 
+                 , r'\s?senior\s+data\s+scient\w+' # (senior data scientist(s))
+                 , r'\s?data scient\w+'  # (data scientist(s))
+                 , r'\bscientist\w?' # (scientist(s))
+                
+                 , r'\s?lead\s+data\s+analyst\w?' # (lead data engineer(s)) 
+                 , r'\s?senior\s+data\s+analyst\w?' # (senior data analyst(s)) 
+                 , r'\s?data analyst\w?' # (data analyst(s))
+                 , r'\banalyst\w?'
+                   ]
 
-                     , r'\s?lead\s+data\s+scient\w+' # (lead data scientist(s)) 
-                     , r'\s?senior\s+data\s+scient\w+' # (senior data scientist(s))
-                     , r'\s?data scient\w+'  # (data scientist(s))
-                     , r'\bscientist\w?' # (scientist(s))
-                    
-                     , r'\s?lead\s+data\s+analyst\w?' # (lead data engineer(s)) 
-                     , r'\s?senior\s+data\s+analyst\w?' # (senior data analyst(s)) 
-                     , r'\s?data analyst\w?' # (data analyst(s))
-                     , r'\banalyst\w?'
-                       ]
+# function that will take a input text string and remove regex expressions
+def removeJobTitles(txt_string, regex_list):
+    try:
+        outtxt = txt_string # initiate output as the input string
+        for idx, regx in enumerate(regex_list):
+            p = re.compile(regx, re.I)
+            outtxt = p.sub("", outtxt)    
+    except Exception as e:
+        print(e.args)
+    else:
+        return outtxt
 
-    # function that will take a input text string and remove regex expressions
-
-    def removeJobTitles(txt_string, regex_list):
-        try:
-            outtxt = txt_string # initiate output as the input string
-            for idx, regx in enumerate(regex_list):
-                p = re.compile(regx, re.I)
-                outtxt = p.sub("", outtxt)    
-        except Exception as e:
-            print(e.args)
-        else:
-            return outtxt
-
-    # call function
-    text_noJobTitles = list( [removeJobTitles(string , leakage_regex) for string in list(df_jobsClean_balanced.jobdescription)])
+# call function
+text_noJobTitles = list( [removeJobTitles(string , leakage_regex) for string in list(df_jobsClean_balanced.jobdescription)])
 ```
 
 ## Part 4 (of 5): Extracting skills
 
-After this I started to we clean the text and then extract the skills that are associated with these data roles
+- After this I started to we clean the text and then extract the skills that are associated with these data roles
 
 ``` python
-    text_removeStopPunc = []
-    for descrip in text_noJobTitles:
-        allstopwords = stopwords.words('english')+list(punctuation)
-        descrip = [word.lower() for word in descrip.split() if word.lower() not in allstopwords]
-        descrip = ' '.join(descrip)
-        text_removeStopPunc.append(descrip)
-        del descrip
+text_removeStopPunc = []
+for descrip in text_noJobTitles:
+    allstopwords = stopwords.words('english')+list(punctuation)
+    descrip = [word.lower() for word in descrip.split() if word.lower() not in allstopwords]
+    descrip = ' '.join(descrip)
+    text_removeStopPunc.append(descrip)
+    del descrip
 ```
+
+- Create a list of skills that should cover the three data professions
+- Explore the text corpus itself using tfIDf to identify other skills that were left out of the skill set
+- the skills were represented as regex terms given slight variations
 
 ```
 
@@ -254,7 +254,7 @@ regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel
 
 ### Matching regex
 
-```
+``` python
 
     hardMatches = [] # empty list object that will contain matched skills per document
 
@@ -275,7 +275,16 @@ regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel
         
     print('Done')
     list(hardMatches[:3])
+```
 
+    #output:
+    #[
+    # ['Phd', 'MachineLearning', 'R'],
+    # ['Algorithms','SQL','Spark','MachineLearning','Matlab','Python','Statistics','Testing','R','MapReduce','Hive','BigData'],
+    # ['SQL', 'Phd', 'MachineLearning', 'Python', 'R']
+    # ]
+
+``` python
     # turning matched skills into a binary (sparse) matrix
     # ========== STEP 01 : create empty matrix / array
 
@@ -300,18 +309,13 @@ regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel
 
 ```
 
-
-
-| index         | Algorithms           | AppEngine |  NoSQL | SQL | Excel | Spark | ... | Label |
-| ------------- |:-------------:| -----:|-----:|-----:|-----:|-----:|-----:|-----:|
-| 0             | 0      | 0 | 0 | 0 | 0  |   0  | ... |  Data Scientist |
-| 1             | 1      | 0 | 0 | 1 | 0  |   1  | ... |  Data Scientist  |
-| 2             | 0      | 0 | 0 | 1 | 0  |   0  | ... |  Data Scientist  |
-| 3             | 0      | 0 | 0 | 1 | 1 |    0 | ... |  Data Scientist  |
-| 4             | 0      | 0 | 0 | 0 | 0 |   1  | ... |  Data Scientist  |
-| 5             | 1      | 0 | 0 | 1 | 0 |   0  | ... |  Data Scientist  |
-
-
+| index | Algorithms | AppEngine |  NoSQL | SQL | Excel | Spark | ... | Label |
+| ----- |:-----:| :-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | ... | Data Scientist |
+| 1 | 1 | 0 | 0 | 1 | 0 | 1 | ... | Data Scientist |
+| 2 | 0 | 0 | 0 | 1 | 0 | 0 | ... | Data Scientist |
+| 3 | 0 | 0 | 0 | 1 | 1 | 0 | ... | Data Scientist |
+| 4 | 0 | 0 | 0 | 0 | 0 | 1 | ... | Data Scientist |
 
 
 ## Part 5 (of 5): 
