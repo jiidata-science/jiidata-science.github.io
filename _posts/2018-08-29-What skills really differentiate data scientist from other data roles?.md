@@ -211,7 +211,6 @@ for descrip in text_noJobTitles:
 - the skills were represented as regex terms given slight variations
 
 ```
-
 regx_hardSkills_list = [r'algorithm\w*' , r'\bapp\seng\w*\b' , r'\w*nosql' , r'\bsql\b', r'\bexcel\b'
             , r'spark' , r'phd', r'\bmetric\w?\b', r'\w*aws\w*\b' , r'java' , r'predict\w+\b'
             , r'\bpipeline\w+\b', r'\bmining\b', r'\bjavascript\b', r'js\b',  r'decision\s*tree\w+\b'
@@ -226,26 +225,24 @@ regx_hardSkills_list = [r'algorithm\w*' , r'\bapp\seng\w*\b' , r'\w*nosql' , r'\
             , r'\bbi\b|\bbusiness\s?int\w*\b' , r'\bruby|\sruby' , r'\w*scala\b' , r'php' , r'vba|visual\s?bas\w*'
             , r'mongo' , r'cassandra' , r'\w*map\s?reduce\w*' , r'pig'
             , r'\w*hive\w*' , r'adobe' , r'nlp' , r'big\s?data' , r'msc', r'\bc\b|c\#' , r'\w*anomalie\w*\b'
-                
             , r'redshift' , r'integrat\w*', r'segment\w*' , r'gcp' , r'azure', r'data\s?management'
             , r'\w*deep\s?learning' , r'data\s+modelling' , r'data\s?quality' , r'computer\s?vision'  ]
 
 regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel' , 'Spark' , 'Phd' , 'Metrics' , 'AWS' 
-                          , 'Java' , 'Predictions', 'Pipelines' , 'DataMining', 'Javascript' , 'Javascript' , 'Decision Trees'
-                          , 'ECL' , 'Hadoop', 'HBase', 'Algebra', 'MachineLearning'
-                          , 'Mathematics', 'Matlab', 'Calculus' , 'Perl'
-                          , 'Powerpoint', 'Visualisation', 'Programming', 'Python', 'ScikitLearn', 'Pandas'
-                          , 'dplyR', 'ReportWriting', 'SAS', 'Scripting', 'Statistics'
-                          , 'KPIs' , 'Tableau' , 'AdWords', 'Testing', 'HypothesisTesting'
-                          , 'HTML', 'PivotTables', 'Design', 'Campaigns', 'GoogleAnalytics'
-                          , 'Agile', 'Scrum', 'Cloudera', 'Cloud', 'JSON', 'APIs'
-                          , 'Security' , 'R', 'Dashboards', 'Qlikview', 'SPSS'
-                          , 'BI', 'Ruby' , 'Scala', 'php', 'VBA'
-                          , 'Mongo', 'Cassandra', 'MapReduce', 'Pig'
-                          , 'Hive', 'Adobe' , 'NLP', 'BigData', 'MSc', 'C' , 'AnomalyDetection'
-                          , 'RedShift', 'Integration', 'Segmentation', 'GCP', 'Azure', 'DataManagement'
-                          , 'DeepLearning' , 'DataModelling' , 'DataQuality' , 'ComputeVision']
-
+            , 'Java' , 'Predictions', 'Pipelines' , 'DataMining', 'Javascript' , 'Javascript' , 'Decision Trees'
+            , 'ECL' , 'Hadoop', 'HBase', 'Algebra', 'MachineLearning'
+            , 'Mathematics', 'Matlab', 'Calculus' , 'Perl'
+            , 'Powerpoint', 'Visualisation', 'Programming', 'Python', 'ScikitLearn', 'Pandas'
+            , 'dplyR', 'ReportWriting', 'SAS', 'Scripting', 'Statistics'
+            , 'KPIs' , 'Tableau' , 'AdWords', 'Testing', 'HypothesisTesting'
+            , 'HTML', 'PivotTables', 'Design', 'Campaigns', 'GoogleAnalytics'
+            , 'Agile', 'Scrum', 'Cloudera', 'Cloud', 'JSON', 'APIs'
+            , 'Security' , 'R', 'Dashboards', 'Qlikview', 'SPSS'
+            , 'BI', 'Ruby' , 'Scala', 'php', 'VBA'
+            , 'Mongo', 'Cassandra', 'MapReduce', 'Pig'
+            , 'Hive', 'Adobe' , 'NLP', 'BigData', 'MSc', 'C' , 'AnomalyDetection'
+            , 'RedShift', 'Integration', 'Segmentation', 'GCP', 'Azure', 'DataManagement'
+            , 'DeepLearning' , 'DataModelling' , 'DataQuality' , 'ComputeVision']
 ```
 
 ### Matching regex
