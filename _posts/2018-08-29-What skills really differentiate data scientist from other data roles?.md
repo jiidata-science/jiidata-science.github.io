@@ -74,11 +74,11 @@ Reed.co.uk have developed an API that allows partners to programmatically access
 
 I developed two simple functions that allowed me to return jobIds and Job descriptions for specific locations and role tiltes (i.e. data scientist, data analyst, data engineer); this is displayed in the code-block below.
 
-getReedJobIDs : this function allows the user to request job IDs associated with a parameterised search. In my case, I used the keywords parameter and the locationName parameter to specify the role title (e.g. 'Data+Scientist') and the city name (e.g. london), respectively. This function returns a list with jobids associated with the query.
+* **getReedJobIDs()** : this function allows the user to request job IDs associated with a parameterised search. In my case, I used the keywords parameter and the locationName parameter to specify the role title (e.g. 'Data+Scientist') and the city name (e.g. london), respectively. This function returns a list with jobids associated with the query.
 
-getJobDescription : this function allows the user to request the job descriptions for specified jobIds (retrieved using the getReedjobIDs function). This function returns a list with jobids and job descriptions, within. The job descriptions were unstructured raw text.
+* **getJobDescription()** : this function allows the user to request the job descriptions for specified jobIds (retrieved using the getReedjobIDs function). This function returns a list with jobids and job descriptions, within. The job descriptions were unstructured raw text.
 
-Importantly, the API had a response limit of 100 jobs per request. I had to request a token, which was passed as metadata in the GET request - unique to me
+Importantly, the API had a response limit of 100 jobs per request. I had to request a token, which was passed as metadata in the **GET** request - unique to me
 
 ``` python
 def getReedJobIDs( jobName , city ):
@@ -131,21 +131,21 @@ So far we've reviewed the data collection process. We have approximately 100 job
 
 After ensuring that the full corpus of job descriptions included an equal volume of job descriptions per role, we started exploring the prevalence of different (data role) skills across the text.
 
-The object of this project was to identify the required skills most associated with each data profession and how these skills differ between roles. With this in mind, I needed to first construct a comprehensive list of skills that accounted for the three roles. For this I used combined two approaches:
+The object of this project was to identify the required skills most associated with each data profession and how these skills differ between roles. With this in mind, I needed to first construct a comprehensive list of skills that accounted for the three roles. To create this list I combined two approaches:
 
-* Creating a comprehensive list of skills based on my knowledge / internet searches
+* **Creating a comprehensive list of skills based on my knowledge / internet searches**
 
     I chose to approach identifying 'skills' within our text corpus by defining an exhaustive list (or as exhaustive as I had the patience for) that represented all skills (of interest) associated with our job roles.
 
     I created two pairs of lists; one pair that represent regex for hard skills and the other pair for soft skills. Within each pair, one list includes a set of regex used to find a specific skill within a text document (e.g. r'\balgorithm\w*' for algorithm or algorithms) and a second list that includes 'clean' names used to create a binary flag if a text document contains the corresponding regex (e.g. 'algorithm').
 
-* Performing tf-IDF on the text corpus itself to identify (additional) skills
+* **Performing tf-IDF on the text corpus itself to identify (additional) skills**
 
     This step required using the text corpus itself. The purpose for this step was to capture any missed skills that hadn't been found as part of approach one. Any new terms or n-grams found with this approach were added to the original list of regular expressions developed in approach one.
 
     For this step, I did not pre-process the text data (such as removing stopwords, stemming or lemmatising). If we looked at term frequency, only, then common words such as ('the', 'and', 'a', 'an', 'because') would likely dominate the most popular terms - these terms are popularly referred to as stopwords. tf-IDf, however, is reltaively robust to the prevalence of stopwords when assessing the presence of interesting terms within a text corpus, by effectively downweighting the term frequency by the prevalence of the term across all text documents.
 
-At this point I started cleaning our text corpus, ready for analysis. As our job descriptions were free text, we needed to extract useful information. When processing a corpus of text one typically begins by 'cleaning' the data, which may include removing stopwords (reference) , removing special characters (reference) aswell as stemming and/or lemmitising (reference) - for more details, analyticsvidhya.com have a ['Comprehensive Guide to text processing'](https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/)
+For a more detailed review of text processing, with Python, Analyticsvidhya.com have created a ['Comprehensive Guide to text processing'](https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/)
 
 Now we have a balanaced dataset, with 96 job descriptions for each data role.
 
