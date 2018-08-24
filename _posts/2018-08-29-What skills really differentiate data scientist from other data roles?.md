@@ -202,6 +202,23 @@ print(AllJobIDs.jobTitle.value_counts())
 AllJobIDs.to_csv('Data/Jobs_Clean_HardSkills.csv', encoding='utf8', index=False)
 ```
 
+
+### Sample of collected data
+
+|JobID|jobLocation|jobTitle|JobDesc|
+|---|---|---|---|
+| 35672272 |   london  |   data+engineer   |   Data Engineer (Python | noSQL) An opportunity f... |
+| 35897057 |   london  |   data+scientist  |   Data Scientist London We're looking for someone... |
+| 35738489 |   london  |   data+scientist  |   Python Developer/Data Scientist - 6 Months - ... |
+| 35788033 |   london  |   data+scientist  |   Data Scientist- Data Science Jobs, Statistica... |
+| 35853388 |   london  |   data+scientist  |   Lead Data Scientist London &#163;100,000 &#43... |
+| 35940926 |   london  |   data+analyst    |   Data Analyst - CRM team looking for a a perm... |
+
+
+
+
+
+
 ## Part 3 (of 5): Data Pre-Processing - Extracting Skills from Text Corpus
 
 So far we've reviewed the data collection process. We have approximately 100 job descriptions for each data role, with a total of ~300.
