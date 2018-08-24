@@ -82,7 +82,7 @@ I developed two simple functions that allowed me to return jobIds and Job descri
 
 * **getJobDescription()** : this function allows the user to request the job descriptions for specified jobIds (first retrieved using the getReedjobIDs() function, above). This function returns a list with jobids and job descriptions, within. The job descriptions were unstructured raw text.
 
-Importantly, Reed.co.uk's API has a r[esponse limit of 100 jobs per keyword](https://www.reed.co.uk/developers/Jobseeker), as specified on their website. Therefore, we're expected just 100 unique job descriptions per role.
+Importantly, Reed.co.uk's API has a [response limit of 100 jobs per keyword](https://www.reed.co.uk/developers/Jobseeker), as specified on their website. Therefore, we're expected just 100 unique job descriptions per role.
 
 ``` python
 def getReedJobIDs( jobName , city ):
@@ -122,7 +122,7 @@ The method that I applied to collect job descriptions was as follows:
     *(4) Used the **getJobDescription()** function to retrieve job descriptions (raw unstructured text) for each jobID
     *(5) Converted all returned data into Pandas dataframe and exported to .csv
 
-So here it is...the output dataset contains the JobID, jobLocation, jobTitle and the jobDesc (i.e. job description).
+So here it is...the output dataset contains the JobID, jobLocation, jobTitle and the jobDesc (i.e. job description). The final dataset had 375 records (125 x job descriptions per role), with ~78% referring to London based opportunities.
 
 |JobID|jobLocation|jobTitle|JobDesc|
 |---|---|---|---|
