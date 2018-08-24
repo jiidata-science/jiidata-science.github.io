@@ -265,47 +265,26 @@ regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel
 ### 4b. Creating a sparse matrix of skills in each document
 
 ``` python
-hardMatches = [] # empty list object that will contain matched skills per document
-
-# for each text document search for each skill (based on regex list)
-for idx, doc in enumerate(text_removeStopPunc):
-    list_matchedSkills = []
-    for regvalue , regname in zip(regx_hardSkills_list , regx_hardfeatName_list):
-        regexSearch = re.findall(regvalue , doc , re.I) # check if skills (regex) matched document
-        # if atleast one match add regname to list
-        if len(regexSearch) > 0:
-            list_matchedSkills.append(regname)
-    hardMatches.append(list_matchedSkills)
-        
-print('Done')
-list(hardMatches[:3])
-```
-
-    #0utput:
-    #[
-    # ['Phd', 'MachineLearning', 'R'],
-    # ['Algorithms','SQL','Spark','MachineLearning','Matlab','Python','Statistics','Testing','R','MapReduce','Hive','BigData'],
-    # ['SQL', 'Phd', 'MachineLearning', 'Python', 'R']
-    # ]
-
-``` python
-# ========== STEP 01 : create empty matrix / array
+# create an empty m x n matrix (m = skills , n = job descriptions)
 n = len(text_removeStopPunc)    # num. of docs
 m = len(regx_hardfeatName_list) # by total num. of skills
 skillsMatrix = [0] * n
 for i in range(n):
     skillsMatrix[i] = [0] * m
+    
+# flag the skills in each document    
+for idx, doc in enumerate(text_removeStopPunc):
+    for regvalue , regname in zip(regx_hardSkills_list , regx_hardfeatName_list):
+        regexSearch = re.findall(regvalue , doc , re.I) # check if skill is present
+        # if atleast one match add regname to list
+        if len(regexSearch) > 0:            
+            indices = regx_hardfeatName_list.index(regname)
+            skillsMatrix[idx][indices] = 1
 
-# ========== STEP 02 : flag skillsets in each doc (using matrix)
-for idx, eachSkillSet in enumerate(hardMatches):
-    for eachSkill in eachSkillSet:
-        indices = regx_hardfeatName_list.index(eachSkill)
-        skillsMatrix[idx][indices] = 1
-
-# ========== STEP 03 : convert matrix / visualise as pandas dataframe
-df_matchedSkills = pd.DataFrame(skillsMatrix, columns=full_skills)
-df_matchedSkills['Label'] = list(df_jobsClean_balanced.QueryTitle) # append the role title to the dataset
-df_matchedSkills[:5]
+# convert sparse/dummy matrix to pandas dataframe
+df_matchedSkills = pd.DataFrame(skillsMatrix , columns = regx_hardfeatName_list)
+df_matchedSkills['Label'] = list(df_jobsClean.jobTitle) # append the role as label
+df_matchedSkills[:5] # show top results
 ```
 
 | index | Algorithms | AppEngine |  NoSQL | SQL | Excel | Spark | ... | Label |
@@ -316,7 +295,7 @@ df_matchedSkills[:5]
 | 3 | 0 | 0 | 0 | 1 | 1 | 0 | ... | Data Scientist |
 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | ... | Data Scientist |
 
-## Part 5 (of 5): 
+## Part 5 (of 5): Analysis
 
 This chart shows the proportion of job descriptions that contain a particular skill, for each of the data roles (note: the blue bar represents data scientists as they were the main focus of my analysis. The purple scatter/dots represent data engineers and the green, data analysts). I've ordered the chart by prevalence of each skill across data science job descriptions.
 
