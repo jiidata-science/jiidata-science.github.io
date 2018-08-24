@@ -297,9 +297,17 @@ df_matchedSkills[:5] # show top results
 
 ## Part 5 (of 5): Analysis
 
-This chart shows the proportion of job descriptions that contain a particular skill, for each of the data roles (note: the blue bar represents data scientists as they were the main focus of my analysis. The purple scatter/dots represent data engineers and the green, data analysts). I've ordered the chart by prevalence of each skill across data science job descriptions.
+**A couple of general points**:
 
-Interestingly, the skills that appear in more than 50% of all data science roles are:
+- We searched the text corpus for a total of 81 x skills. Five skills had no matches for across roles : ['AppEngine', 'Algebra', 'Calculus', 'Perl', 'dplyR']
+- The total number of skills present for each role was: Data Science (67 skills), Data Engineer (66 skills) and Data Analyst (55 skills)
+
+This chart below the proportion of job descriptions that contain a particular skill, for each of the data roles (note: the blue bar represents data scientists as they were the main focus of my analysis. The purple scatter/dots represent data engineers and the green, data analysts). I've ordered the chart by prevalence of each skill across data science job descriptions.
+
+<iframe width="1000" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/14.embed"></iframe>
+
+**A look at the most in-demand skills for Data Scientists**:
+
 - Python *( **Scientist : 99%** , Engineer : 78% , Analyst : 25% )*
 - Machine Learning *( **Scientist : 89%** , Engineer : 31% , Analyst : 8% )*
 - R *( **Scientist : 71%** , Engineer : 11% , Analyst : 13% )*
@@ -310,11 +318,9 @@ Additionally, a higher proportion of data science jobs require these five skills
 
 The above chart also illustrates the skills that are far more required for engineering (e.g. Spark and Hadoop) and analyst (e.g. Report Writing and BI) roles, than for data science. **Feel free to explore the chart yourself, but I think we can better visualise the skills that are more specific to data scientists and perhaps which are common across all three.**
 
+**Comparing skills more specific to Data Scientists that other roles**:
 
-
-<iframe width="1000" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/14.embed"></iframe>
-
-<iframe width="1000" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/16.embed"></iframe>
+<iframe width="1000" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/18.embed"></iframe>
 
 ## Outcomes
 
