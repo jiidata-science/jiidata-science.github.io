@@ -114,13 +114,13 @@ We then used these functions to collect our data. Now typically this would be th
 
 The method that I applied to collect job descriptions was as follows:
 
-    *(1) Used the **getReedJobIDs()** function to retrieve job IDs associated with the following query paramters:
-        *keywords: ['data+scientist' , 'data+engineer' , 'data+analyst']
-        *locations: ['london' ,'birmingham','glasgow', 'birmingham', 'liverpool', 'leeds']
-    *(2) Deduplicated job IDs
-    *(3) Balanced the returned dataset to ensure there was an equal number job descriptions for each location (i.e. remove any inherent location-based bias)
-    *(4) Used the **getJobDescription()** function to retrieve job descriptions (raw unstructured text) for each jobID
-    *(5) Converted all returned data into Pandas dataframe and exported to .csv
+* (1) Used the **getReedJobIDs()** function to retrieve job IDs associated with the following query paramters:
+    * keywords: ['data+scientist' , 'data+engineer' , 'data+analyst']
+    * locations: ['london' ,'birmingham','glasgow', 'birmingham', 'liverpool', 'leeds']
+* (2) Deduplicated job IDs
+* (3) Balanced the returned dataset to ensure there was an equal number job descriptions for each location (i.e. remove any inherent location-based bias)
+* (4) Used the **getJobDescription()** function to retrieve job descriptions (raw unstructured text) for each jobID
+* (5) Converted all returned data into Pandas dataframe and exported to .csv
 
 So here it is...the output dataset contains the JobID, jobLocation, jobTitle and the jobDesc (i.e. job description). The final dataset had 375 records (125 x job descriptions per role), with ~78% referring to London based opportunities.
 
