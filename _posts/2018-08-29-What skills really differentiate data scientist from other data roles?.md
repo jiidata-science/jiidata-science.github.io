@@ -98,7 +98,7 @@ def getReedJobIDs( jobName , city ):
                 job_ids.append(value) 
                 query_name.append(jobName)
                 query_location.append(city)       
-    return([job_ids, query_name, query_location])
+    return( job_ids )
 
 def getJobDescription( jobId ):
     base_url_request = 'https://www.reed.co.uk/api/1.0/jobs/{0}'.format(jobId)
@@ -110,100 +110,19 @@ def getJobDescription( jobId ):
     return( [ jobId , desc_clean ] )
 ```
 
-We now **use** these functions to collect our data.
+We then used these functions to collect our data. Now typically this would be the point I'd insert a code block that shows what/how I performed this task - however, as this was over 80 lines of code I decided to show the output dataset and provide a [link](www.google.com) to the full code set.
 
-``` python
-# ======================================================
-# STEP 01 : Requesting job ids
-# ======================================================
+The method that I applied to collect job descriptions was as follows:
 
-# we loop through two cities and three data job titles to return corresponding job descriptions
-cities = ['london' ,'birmingham','glasgow', 'birmingham', 'liverpool', 'leeds']
-jobNames = ['data+scientist', 'data+analyst', 'data+engineer']
+    * (1) Used the **getReedJobIDs()** function to retrieve job IDs associated with the following query paramters:
+        * keywords: ['data+scientist' , 'data+engineer' , 'data+analyst']
+        * locations: ['london' ,'birmingham','glasgow', 'birmingham', 'liverpool', 'leeds']
+    * (2) Deduplicated job IDs
+    * (3) Balanced the returned dataset to ensure there was an equal number job descriptions for each location (i.e. remove any inherent location-based bias)
+    * (4) Used the **getJobDescription()** function to retrieve job descriptions (raw unstructured text) for each jobID
+    * (5) Converted all returned data into Pandas dataframe and exported to .csv
 
-# get job ids based on query terms (in API)
-jobIDs_list = []
-queryNames_list = []
-queryLocation_list = []
-
-for city in cities:
-    for job in jobNames:
-        jobIds = getReedJobIDs( job , city ) # get job ids for each city
-        jobIDs_list.extend( jobIds ) \
-            , queryNames_list.extend([job] * len(jobIds)) \
-            , queryLocation_list.extend([city] * len(jobIds))
-
-# convert to pandas dataframe
-AllJobIDs  = pd.DataFrame( { 'JobID': jobIDs_list , 'jobTitle': queryNames_list , 'jobLocation': queryLocation_list })
-print("=== # of job descriptions before deduplication is %d"%(len(AllJobIDs)))
-
-AllJobIDs.drop_duplicates(['JobID'], keep="first", inplace=True) # drop duplicates
-print("=== # of job descriptions after deduplication is %d"%(len(AllJobIDs)))
-
-
-# ======================================================
-# STEP 02 : Balancing the dataset
-# ======================================================
-
-# === ensure same number of job descriptions per role & location
-print(AllJobIDs.groupby(['jobLocation', 'jobTitle']).count())
-print(len(AllJobIDs))
-
-df_summLoc = pd.DataFrame(AllJobIDs.groupby(['jobLocation', 'jobTitle']).count()) # job titles per location and role
-df_summLoc.reset_index(inplace = True)
-df_minPerLoc = pd.DataFrame(df_summLoc.groupby(['jobLocation'])['JobID'].min()).reset_index()
-
-# create dictionary of minimum jobs per location
-dict_minPerLoc = dict(zip(df_minPerLoc['jobLocation'], df_minPerLoc['JobID']))
-
-print('=== Dictionary: Minimum Jobs per role & location ===')
-print(dict_minPerLoc)
-print('====================================================')
-
-# for each role, city combination only keep the MINIMUM available across all three roles
-for city in dict_minPerLoc.keys():
-    for role in jobNames:
-        
-        currNumRecords = len(AllJobIDs[(AllJobIDs['jobTitle']==role) & (AllJobIDs['jobLocation']==city)])
-        reqNumRecords = dict_minPerLocation[city]
-        dropNumRecords = currNumRecords - reqNumRecords        
-        print('''[INFO - SAMPLING] Down-sampling for {0} and {1}. # jobs/samples to randomly remove : {2}.'''.format(city , role, dropNumRecords))
-            
-        # randomly select indices to drop (matching location + role criteria)
-        dropIndices = np.random.choice(AllJobIDs[(AllJobIDs['jobTitle']==role) & (AllJobIDs['jobLocation']==city)].index, dropNumRecords, replace = False)
-        
-        # drop random indices from file
-        AllJobIDs.drop(dropIndices, inplace=True)
-        
-print(AllJobIDs.groupby(['jobLocation', 'jobTitle']).count())
-print(len(AllJobIDs))
-
-# ======================================================
-# STEP 03 : Get all job descriptions
-# ======================================================
-
-# using the JobID, get all job descriptions
-jobDescList = []            
-for idx, jobId in enumerate(AllJobIDs.JobID):
-    
-    if idx % 25 == 0:
-        print('[INFO] Retrieving ID number %d of %d'%(idx+1 , len(AllJobIDs.JobID)))
-    jobDescList.append( getJobDescription(jobId) )
-
-# append job descriptions to base dataset
-AllJobIDs['JobDesc'] = [desc[1] for desc in jobDescList]
-
-# ======================================================
-# STEP 04 : Save to file
-# ======================================================
-
-# save data as csv to disk
-print(AllJobIDs.jobTitle.value_counts())
-AllJobIDs.to_csv('Data/Jobs_Clean_HardSkills.csv', encoding='utf8', index=False)
-```
-
-
-### Sample of collected data
+So here it is...the output dataset contains the JobID, jobLocation, jobTitle and the jobDesc (i.e. job description).
 
 |JobID|jobLocation|jobTitle|JobDesc|
 |---|---|---|---|
@@ -213,10 +132,6 @@ AllJobIDs.to_csv('Data/Jobs_Clean_HardSkills.csv', encoding='utf8', index=False)
 | 35788033 |   london  |   data+scientist  |   Data Scientist- Data Science Jobs, Statistica... |
 | 35853388 |   london  |   data+scientist  |   Lead Data Scientist London &#163;100,000 ... |
 | 35940926 |   london  |   data+analyst    |   Data Analyst - CRM team looking for a a perm... |
-
-
-
-
 
 
 ## Part 3 (of 5): Data Pre-Processing - Extracting Skills from Text Corpus
