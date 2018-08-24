@@ -114,13 +114,13 @@ We then used these functions to collect our data. Now typically this would be th
 
 The method that I applied to collect job descriptions was as follows:
 
-* (1) Used the **getReedJobIDs()** function to retrieve job IDs associated with the following query paramters:
+1. Used the **getReedJobIDs()** function to retrieve job IDs associated with the following query paramters:
     * keywords: ['data+scientist' , 'data+engineer' , 'data+analyst']
     * locations: ['london' ,'birmingham','glasgow', 'birmingham', 'liverpool', 'leeds']
-* (2) Deduplicated job IDs
-* (3) Balanced the returned dataset to ensure there was an equal number job descriptions for each location (i.e. remove any inherent location-based bias)
-* (4) Used the **getJobDescription()** function to retrieve job descriptions (raw unstructured text) for each jobID
-* (5) Converted all returned data into Pandas dataframe and exported to .csv
+2. Deduplicated job IDs
+3. Balanced the returned dataset to ensure there was an equal number job descriptions for each location (i.e. remove any inherent location-based bias)
+4. Used the **getJobDescription()** function to retrieve job descriptions (raw unstructured text) for each jobID
+5. Converted all returned data into Pandas dataframe and exported to .csv
 
 So here it is...the output dataset contains the JobID, jobLocation, jobTitle and the jobDesc (i.e. job description). The final dataset had 375 records (125 x job descriptions per role), with ~78% referring to London based opportunities.
 
@@ -134,31 +134,13 @@ So here it is...the output dataset contains the JobID, jobLocation, jobTitle and
 | 35940926 |   london  |   data+analyst    |   Data Analyst - CRM team looking for a a perm... |
 
 
-## Part 3 (of 5): Data Pre-Processing - Extracting Skills from Text Corpus
+## Part 3 (of 5): Data Pre-Processing - Creating a list of skills & data cleaning
 
-So far we've reviewed the data collection process. We have approximately 100 job descriptions for each data role, with a total of ~300.
+So far we've reviewed the data collection process. At this point I had 125 x job descriptions for each data role, with a total of 375.
 
-After ensuring that the full corpus of job descriptions included an equal volume of job descriptions per role, we started exploring the prevalence of different (data role) skills across the text.
+### 3a. Removing the Job Title from the job description
 
-The object of this project was to identify the required skills most associated with each data profession and how these skills differ between roles. With this in mind, I needed to first construct a comprehensive list of skills that accounted for the three roles. To create this list I combined two approaches:
-
-* **Creating a comprehensive list of skills based on my knowledge / internet searches**
-
-    I chose to approach identifying 'skills' within our text corpus by defining an exhaustive list (or as exhaustive as I had the patience for) that represented all skills (of interest) associated with our job roles.
-
-    I created two pairs of lists; one pair that represent regex for hard skills and the other pair for soft skills. Within each pair, one list includes a set of regex used to find a specific skill within a text document (e.g. r'\balgorithm\w*' for algorithm or algorithms) and a second list that includes 'clean' names used to create a binary flag if a text document contains the corresponding regex (e.g. 'algorithm').
-
-* **Performing tf-IDF on the text corpus itself to identify (additional) skills**
-
-    This step required using the text corpus itself. The purpose for this step was to capture any missed skills that hadn't been found as part of approach one. Any new terms or n-grams found with this approach were added to the original list of regular expressions developed in approach one.
-
-    For this step, I did not pre-process the text data (such as removing stopwords, stemming or lemmatising). If we looked at term frequency, only, then common words such as ('the', 'and', 'a', 'an', 'because') would likely dominate the most popular terms - these terms are popularly referred to as stopwords. tf-IDf, however, is reltaively robust to the prevalence of stopwords when assessing the presence of interesting terms within a text corpus, by effectively downweighting the term frequency by the prevalence of the term across all text documents.
-
-For a more detailed review of text processing, with Python, Analyticsvidhya.com have created a ['Comprehensive Guide to text processing'](https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/)
-
-Now we have a balanaced dataset, with 96 job descriptions for each data role.
-
-Before we began extracting skills from the job descriptions, I first removed the role titles from the text - the purpose of this step was to remove words that could result in target leakage. For example, for data engineers it is likely that the term "engineer" or "engineering" will appear in corresponding job descriptions as a required skill (some examples below taken from the text corpus).
+Before we began flagging skills from the job descriptions, I first removed the role titles from the text - the purpose of this step was to remove words that could result in target leakage. For example, for data engineers it is likely that the term "engineer" or "engineering" will appear in corresponding job descriptions as a required skill (some examples below taken from the text corpus).
 
 > "The business requires <mark>creative engineering</mark> balanced with high quality and customer focus"
 
@@ -200,7 +182,7 @@ def removeJobTitles(txt_string, regex_list):
 text_noJobTitles = list( [removeJobTitles(string , leakage_regex) for string in list(df_jobsClean_balanced.jobdescription)])
 ```
 
-## Part 4 (of 5): Extracting skills
+### 3b. Removing stopwords & punctuation
 
 - After this I started to we clean the text and then extract the skills that are associated with these data roles
 
@@ -215,7 +197,31 @@ for descrip in text_noJobTitles:
     del descrip
 ```
 
-### Creating a list of skills using regex
+
+
+
+
+
+
+## Part 4 (of 5): Creating a skills matrix
+
+### 4a. Creating a list of skills using regex
+
+Next I started to explore the presence of different required skills across job descriptions. The objective of this project was to identify the required skills most associated with each data profession and how these skills differ between roles. With this in mind, I first constructed a comprehensive list of skills that accounted for the three roles. To create this list I combined two approaches:
+
+* **(1) Creating a comprehensive list of skills based on my knowledge / internet searches**
+
+    This approach involved defining an exhaustive list (or as exhaustive as I had the patience for) that represented all skills (of interest) associated with our job roles.
+
+    I created two pairs of lists; one pair that represent regex for hard skills and the other pair for soft skills. Within each pair, one list includes a set of regex used to find a specific skill within a text document (e.g. r'\balgorithm\w*' for algorithm or algorithms) and a second list that includes 'clean' names used to create a binary flag if a text document contains the corresponding regex (e.g. 'algorithm').
+
+* **(2) Performing tf-IDF on the text corpus itself to identify (additional/missed) skills**
+
+    This step required using the text corpus itself. The purpose for this step was to identify any missed skills that hadn't been found as part of approach one. Any newly identified terms or n-grams were added to the original list.
+
+    Before performing tf-IDf I removed stopwords - these are words such as ('the', 'and', 'a', 'an', 'because') that are commonly used but do not carry any importance. We used ```nltk.stopwords``` as out reference list of stopwords.
+
+For a more detailed overview of text processing, with Python, Analyticsvidhya.com have created a ['Comprehensive Guide to text processing'](https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/)
 
 - Create a list of skills that should cover the three data professions
 - Explore the text corpus itself using tfIDf to identify other skills that were left out of the skill set
@@ -256,7 +262,7 @@ regx_hardfeatName_list = ['Algorithms' , 'AppeEngine' , 'NoSQL' , 'SQL' , 'Excel
             , 'DeepLearning' , 'DataModelling' , 'DataQuality' , 'ComputeVision']
 ```
 
-### Creating a sparse matrix of skills in each document
+### 4b. Creating a sparse matrix of skills in each document
 
 ``` python
 hardMatches = [] # empty list object that will contain matched skills per document
@@ -324,6 +330,12 @@ Interestingly, the skills that appear in more than 50% of all data science roles
 Additionally, a higher proportion of data science jobs require these five skills than other data roles. It's quite clear that a budding data scientist should focus on upskilling in each of these areas. Whilst each person has their own coding language preference, I think it's useful for a data scientist to have a working appreciation for both R and Python as they may each be (slighltly) better suited to different tasks.
 
 The above chart also illustrates the skills that are far more required for engineering (e.g. Spark and Hadoop) and analyst (e.g. Report Writing and BI) roles, than for data science. **Feel free to explore the chart yourself, but I think we can better visualise the skills that are more specific to data scientists and perhaps which are common across all three.**
+
+
+
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/14.embed"></iframe>
+
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/16.embed"></iframe>
 
 ## Outcomes
 
