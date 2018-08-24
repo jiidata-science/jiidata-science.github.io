@@ -333,9 +333,9 @@ The above chart also illustrates the skills that are far more required for engin
 
 
 
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/14.embed"></iframe>
+<iframe width="1000" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/14.embed"></iframe>
 
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/16.embed"></iframe>
+<iframe width="1000" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/16.embed"></iframe>
 
 ## Outcomes
 
