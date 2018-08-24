@@ -39,6 +39,8 @@ Over the last eight years I've been in data roles across a number of industries 
 
 ## Part 1 (of 5) : Required Python Libraries
 
+This step is pretty trivial so little explanation is needed in addition to the commented code-block below. It is perhaps useful to note, however, that in order to use Plotly, within a jupyter notebook, I had to use the plotly.offline configuration and specify init_notebook_mode(connected=True) .
+
 
 ``` python
 # libraries for querying API
@@ -49,10 +51,16 @@ import json
 import pandas as pd
 import string
 import nltk
-from nltk.corpus import stopwords
 import numpy as np
-import re
-from string import punctuation
+
+import re # for identifying skills, in text, using regular expressions
+from nltk.corpus import stopwords # for removal of stopwords from corpus
+from string import punctuation # for removal of special characters / punctuation from corpus
+
+# libraries for classification model pipeline
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
 
 # libraries (and configuration) for visualisation with Plotly
 import matplotlib.pyplot as plt
@@ -62,28 +70,24 @@ import plotly.graph_objs as go
 init_notebook_mode(connected=True)
 %matplotlib inline
 
-# libraries for classification model pipeline
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
 ```
 
 ## Part 2 (of 5): Data collection - Using Reed.co.uk's **[JobSeeker API](https://www.reed.co.uk/developers/Jobseeker)** to retrieve job descriptions
 
-Reed.co.uk have developed an API that allows partners to programmatically access jobs listed in their database. This service is available as an HTTP GET request, which can be parameterised to allow the user to perform specific searches (e.g. for specific roles, locations and salary expectations, to name a few). For more information refer to the [Reed.co.uk website](https://www.reed.co.uk/developers/Jobseeker).
+Reed.co.uk have developed a **FREE API** that allows partners to programmatically access jobs listed in their database. This service is available as an HTTP GET request, which can be parameterised to allow the user to perform specific searches (e.g. from specific roles, locations and salary expectations, to name a few). For more information refer to the [Reed.co.uk website](https://www.reed.co.uk/developers/Jobseeker). To use this service all you need to do is sign up as a 'partner' by providing a few basic details to retrieve a personal authorisation token, which is passed as metadata when calling the API.
 
-I developed two simple functions that allowed me to return jobIds and Job descriptions for specific locations and role tiltes (i.e. data scientist, data analyst, data engineer); this is displayed in the code-block below.
+I developed two simple functions that allowed me to return jobIds and Job descriptions for specific locations (e.g. london, manchester, glasgow ...) and role tiltes (i.e. data scientist, data analyst, data engineer), displayed in the code-block below. To summarise their uses:
 
-* **getReedJobIDs()** : this function allows the user to request job IDs associated with a parameterised search. In my case, I used the keywords parameter and the locationName parameter to specify the role title (e.g. 'Data+Scientist') and the city name (e.g. london), respectively. This function returns a list with jobids associated with the query.
+* **getReedJobIDs()** : this function allows the user to request jobIDs associated with a parameterised search. In my case, I used the *keywords* parameter and the *locationName* parameter to specify the role title (e.g. 'data+scientist') and the city name (e.g. 'london'), respectively. This function returns a list with jobids associated with your query parameters.
 
-* **getJobDescription()** : this function allows the user to request the job descriptions for specified jobIds (retrieved using the getReedjobIDs function). This function returns a list with jobids and job descriptions, within. The job descriptions were unstructured raw text.
+* **getJobDescription()** : this function allows the user to request the job descriptions for specified jobIds (first retrieved using the getReedjobIDs() function, above). This function returns a list with jobids and job descriptions, within. The job descriptions were unstructured raw text.
 
-Importantly, the API had a response limit of 100 jobs per request. I had to request a token, which was passed as metadata in the **GET** request - unique to me
+Importantly, Reed.co.uk's API has a r[esponse limit of 100 jobs per keyword](https://www.reed.co.uk/developers/Jobseeker), as specified on their website. Therefore, we're expected just 100 unique job descriptions per role.
 
 ``` python
 def getReedJobIDs( jobName , city ):
     base_url_request = 'https://www.reed.co.uk/api/1.0/search?keywords={0}&locationName={1}&graduate=false'.format(jobName , city)
-    r = requests.get(base_url_request, auth=('336c2000-49ff-4229-a3cc-04303cf82eab', 'pass'))
+    r = requests.get(base_url_request, auth=('<enter-authorisation-token-here', 'pass')) # this is where you put the authorisation token
     convert_json = json.loads(r.text)
     job_ids = []
     query_name = []
@@ -106,23 +110,96 @@ def getJobDescription( jobId ):
     return( [ jobId , desc_clean ] )
 ```
 
+We now **use** these functions to collect our data.
+
 ``` python
+# ======================================================
+# STEP 01 : Requesting job ids
+# ======================================================
+
 # we loop through two cities and three data job titles to return corresponding job descriptions
-cities = ['london', 'manchester', 'glasgow', 'birmingham', 'liverpool', 'leeds', 'Bristol']
+cities = ['london' ,'birmingham','glasgow', 'birmingham', 'liverpool', 'leeds']
 jobNames = ['data+scientist', 'data+analyst', 'data+engineer']
 
 # get job ids based on query terms (in API)
-jobsidsList = []
+jobIDs_list = []
+queryNames_list = []
+queryLocation_list = []
+
 for city in cities:
     for job in jobNames:
-        add = getReedJobIDs( job , city ) # get job ids for each city
-        jobsidsList.append( add )
+        jobIds = getReedJobIDs( job , city ) # get job ids for each city
+        jobIDs_list.extend( jobIds ) \
+            , queryNames_list.extend([job] * len(jobIds)) \
+            , queryLocation_list.extend([city] * len(jobIds))
 
-# create a single pandas dataframe with all jobs and job descriptions
-DataScientist = pd.DataFrame( { 'JobID': jobsidsList[0][0], 'QueryTitle': jobsidsList[0][1], 'jobLocation': jobsidsList[0][2]})
-DataAnalyst   = pd.DataFrame( { 'JobID': jobsidsList[1][0], 'QueryTitle': jobsidsList[1][1], 'jobLocation': jobsidsList[1][2]})
-DataEngineer  = pd.DataFrame( { 'JobID': jobsidsList[2][0], 'QueryTitle': jobsidsList[2][1], 'jobLocation': jobsidsList[2][2]})
-AllJobIDs     = pd.concat( [DataAnalyst, DataEngineer, DataScientist], axis = 0 )
+# convert to pandas dataframe
+AllJobIDs  = pd.DataFrame( { 'JobID': jobIDs_list , 'jobTitle': queryNames_list , 'jobLocation': queryLocation_list })
+print("=== # of job descriptions before deduplication is %d"%(len(AllJobIDs)))
+
+AllJobIDs.drop_duplicates(['JobID'], keep="first", inplace=True) # drop duplicates
+print("=== # of job descriptions after deduplication is %d"%(len(AllJobIDs)))
+
+
+# ======================================================
+# STEP 02 : Balancing the dataset
+# ======================================================
+
+# === ensure same number of job descriptions per role & location
+print(AllJobIDs.groupby(['jobLocation', 'jobTitle']).count())
+print(len(AllJobIDs))
+
+df_summLoc = pd.DataFrame(AllJobIDs.groupby(['jobLocation', 'jobTitle']).count()) # job titles per location and role
+df_summLoc.reset_index(inplace = True)
+df_minPerLoc = pd.DataFrame(df_summLoc.groupby(['jobLocation'])['JobID'].min()).reset_index()
+
+# create dictionary of minimum jobs per location
+dict_minPerLoc = dict(zip(df_minPerLoc['jobLocation'], df_minPerLoc['JobID']))
+
+print('=== Dictionary: Minimum Jobs per role & location ===')
+print(dict_minPerLoc)
+print('====================================================')
+
+# for each role, city combination only keep the MINIMUM available across all three roles
+for city in dict_minPerLoc.keys():
+    for role in jobNames:
+        
+        currNumRecords = len(AllJobIDs[(AllJobIDs['jobTitle']==role) & (AllJobIDs['jobLocation']==city)])
+        reqNumRecords = dict_minPerLocation[city]
+        dropNumRecords = currNumRecords - reqNumRecords        
+        print('''[INFO - SAMPLING] Down-sampling for {0} and {1}. # jobs/samples to randomly remove : {2}.'''.format(city , role, dropNumRecords))
+            
+        # randomly select indices to drop (matching location + role criteria)
+        dropIndices = np.random.choice(AllJobIDs[(AllJobIDs['jobTitle']==role) & (AllJobIDs['jobLocation']==city)].index, dropNumRecords, replace = False)
+        
+        # drop random indices from file
+        AllJobIDs.drop(dropIndices, inplace=True)
+        
+print(AllJobIDs.groupby(['jobLocation', 'jobTitle']).count())
+print(len(AllJobIDs))
+
+# ======================================================
+# STEP 03 : Get all job descriptions
+# ======================================================
+
+# using the JobID, get all job descriptions
+jobDescList = []            
+for idx, jobId in enumerate(AllJobIDs.JobID):
+    
+    if idx % 25 == 0:
+        print('[INFO] Retrieving ID number %d of %d'%(idx+1 , len(AllJobIDs.JobID)))
+    jobDescList.append( getJobDescription(jobId) )
+
+# append job descriptions to base dataset
+AllJobIDs['JobDesc'] = [desc[1] for desc in jobDescList]
+
+# ======================================================
+# STEP 04 : Save to file
+# ======================================================
+
+# save data as csv to disk
+print(AllJobIDs.jobTitle.value_counts())
+AllJobIDs.to_csv('Data/Jobs_Clean_HardSkills.csv', encoding='utf8', index=False)
 ```
 
 ## Part 3 (of 5): Data Pre-Processing - Extracting Skills from Text Corpus
