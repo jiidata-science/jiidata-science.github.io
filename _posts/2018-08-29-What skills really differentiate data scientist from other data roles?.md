@@ -302,11 +302,11 @@ df_matchedSkills[:5] # show top results
 - We searched the text corpus for a total of 81 x skills. Five skills had no matches for across roles : ['AppEngine', 'Algebra', 'Calculus', 'Perl', 'dplyR']
 - The total number of skills present for each role was: Data Science (67 skills), Data Engineer (66 skills) and Data Analyst (55 skills)
 
+**A look at the most in-demand skills for Data Scientists**:
+
 This chart below the proportion of job descriptions that contain a particular skill, for each of the data roles (note: the blue bar represents data scientists as they were the main focus of my analysis. The purple scatter/dots represent data engineers and the green, data analysts). I've ordered the chart by prevalence of each skill across data science job descriptions.
 
 <iframe width="1000" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/14.embed"></iframe>
-
-**A look at the most in-demand skills for Data Scientists**:
 
 - Python *( **Scientist : 99%** , Engineer : 78% , Analyst : 25% )*
 - Machine Learning *( **Scientist : 89%** , Engineer : 31% , Analyst : 8% )*
@@ -320,7 +320,7 @@ The above chart also illustrates the skills that are far more required for engin
 
 **Comparing skills more specific to Data Scientists that other roles**:
 
-<iframe width="1000" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/18.embed"></iframe>
+<iframe width="1000" height="550" frameborder="0" scrolling="no" src="//plot.ly/~jii-datascience/20.embed"></iframe>
 
 ## Outcomes
 
